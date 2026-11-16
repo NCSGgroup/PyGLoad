@@ -121,3 +121,54 @@ def test_ngl_catalogue_and_steps(tmp_path):
     ev = read_ngl_steps(tmp_path / 'steps.txt', as_events=True)['AAAA']
     assert [e.kind for e in ev] == ['equipment', 'earthquake'] and ev[1].info.split()[1] == '6.4'
     assert len(read_ngl_steps(tmp_path / 'steps.txt', kinds=('equipment',))['AAAA']) == 1
+
+
+def test_ngl_load_predictions(tmp_path):
+    head = 'site YYMMMDD yyyy.yyyy ' + ' '.join('c%d' % i for i in range(38)) + '\n'
+    lines = [head]
+    for k, t in enumerate(np.arange(2015, 2016, 1 / 365.25)):
+        base = ['0'] * 20                              # columns 4..23 of the position file
+        ntal = [0.0, 0.0, 2e-3 * np.cos(2 * np.pi * t)]
+        ntol = [0.0, 0.0, 1e-3]
+        hydl = [0.0, 0.0, 5e-3]
+        lines.append('AAAA 15JAN01 %.4f ' % t + ' '.join(base) + ' ' +
+                     ' '.join('%.5f' % v for v in ntal + ntol + hydl + [0] * 9) + '\n')
+    (tmp_path / 'AAAA.tenv3').write_text(''.join(lines))
+    t, d = ngl.read_load_predictions(tmp_path / 'AAAA.tenv3')
+    assert np.allclose(d['U'], 2e-3 * np.cos(2 * np.pi * t) + 1e-3, atol=1e-5) and np.allclose(d['E'], 0)
+    t, d = ngl.read_load_predictions(tmp_path / 'AAAA.tenv3', models=('HYDL',))
+    assert np.allclose(d['U'], 5e-3)
+    assert set(ngl.load_corrections(tmp_path)) == {'AAAA'}
+
+
+def test_ngl_cmcf_and_combined_corrections(tmp_path):
+    (tmp_path / 'lp').mkdir(); (tmp_path / 'cmcf').mkdir()
+    t = np.arange(2015, 2016, 1 / 365.25)
+    lines = [' aaaa    46.0    7.0    cmcf   tenv3 files through 11 apr 2026\n']
+    lines += [' aaaa   15JAN01  %.4f   0.000100 -0.000200  %.6f\n' % (tt, 2e-3 * np.cos(2 * np.pi * tt)) for tt in t]
+    (tmp_path / 'cmcf' / 'aaaa').write_text(''.join(lines))
+    t2, d = ngl.read_cmcf(tmp_path / 'cmcf' / 'aaaa')
+    assert np.allclose(d['U'], 2e-3 * np.cos(2 * np.pi * t2), atol=3e-6) and np.allclose(d['E'], 1e-4)
+    c = ngl.load_corrections(tmp_path / 'lp', ['AAAA'], models=(), cmcf_folder=tmp_path / 'cmcf')
+    assert set(c) == {'AAAA'} and np.allclose(c['AAAA'][1]['N'], -2e-4)
+    assert ngl.load_corrections(tmp_path / 'lp', ['AAAA'], models=('NTAL',), cmcf_folder=tmp_path / 'cmcf') == {}
+
+
+def test_select_reference_ring_keeps_one_far_station_per_cell():
+    from pygwater.preprocessing.ngl import StationInfo, select_reference_ring
+    st = [StationInfo('NEAR', 30.0, -95.0, 0, '2010-01-01', '2020-01-01', 3000),
+          StationInfo('FARA', 30.2, -104.3, 0, '2010-01-01', '2020-01-01', 3000),    # ~900 km west
+          StationInfo('FARB', 30.4, -104.6, 0, '2010-01-01', '2020-01-01', 3500),    # same 1-deg cell, more data
+          StationInfo('SHRT', 37.0, -95.0, 0, '2019-01-01', '2020-01-01', 300),      # far, too short
+          StationInfo('TOOF', 45.0, -95.0, 0, '2010-01-01', '2020-01-01', 3000)]     # beyond max_km
+    assert select_reference_ring(st, (29.8, -95.0), 700, 1300, '2012-01', '2019-12', 4) == ['FARB']
+
+
+def test_dataset_select():
+    import numpy as np
+    from pygwater.preprocessing import GNSSDataset
+    ds = GNSSDataset(['A', 'B', 'C'], np.array([30., 35., 40.]), np.array([-95., -95., -95.]), ['2017-08-01'],
+                     {'U': np.array([[1., 2., 3.]])}, {'U': np.ones((1, 3))}, ('U',), ('2017-08-01', '2017-08-01'))
+    out = ds.select(box=(29, 36, -96, -94))
+    assert out.names == ['A', 'B'] and out.values['U'].tolist() == [[1., 2.]]
+    assert ds.select(names=['C']).names == ['C'] and ds.select(exclude=['A']).names == ['B', 'C']

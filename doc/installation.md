@@ -122,6 +122,9 @@ python studies/Fu2015_PNW/real_data.py         # a reproducible study
 python -m pytest tests -q                      # all tests; those needing the Love numbers are skipped if input/LLN/ is missing
 ```
 
+The install metadata (`pygwater.egg-info`) is written to `installation/`, so the top level stays clean; it is
+not tracked by git. If an older install left `pygwater.egg-info` at the top level, delete it.
+
 (The tests also run from a plain checkout without installation.) In PyCharm, select the `pygwater` interpreter after
 the install; no source-root marking is needed.
 

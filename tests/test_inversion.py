@@ -55,3 +55,41 @@ def test_choose_alpha_rejects_time_series():
         solver.choose_alpha(rng.normal(size=(5, 30)))      # (ntime, N_obs): ambiguous for GCV
     alpha, _ = solver.choose_alpha(rng.normal(size=30))
     assert alpha > 0
+
+
+def test_inversion_warns_when_the_basis_is_finer_than_the_network():
+    """a misconfigured spectral basis fits the data as well as a correct one, so PyGWater warns instead"""
+    import warnings
+    from pygwater.inversion.workflow import MonthlyInversion
+    from pygwater.preprocessing import GNSSDataset
+
+    class Basis:                               # stands for a spherical-harmonic or Slepian basis of degree L
+        n_param = 4
+
+        def __init__(self, lmax):
+            self.lmax = lmax
+
+        def design_matrix(self, lat, lon, lln, obs):
+            return np.ones((len(lat), self.n_param))
+
+    lat, lon = np.meshgrid(np.arange(40, 46, 1.0), np.arange(-120, -114, 1.0))      # 1-degree spacing
+    n = lat.size
+    ds = GNSSDataset(list(map(str, range(n))), lat.ravel(), lon.ravel(), ['2020-01'], {'U': np.zeros((1, n))},
+                     {'U': np.full((1, n), 1e-3)}, ('U',), ('2020-01', '2020-01'))
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter('always')
+        MonthlyInversion(Basis(120), None, ds)                                  # 180/s = 180: fine
+        assert not [x for x in w if 'station spacing' in str(x.message)]
+        inv = MonthlyInversion(Basis(480), None, ds)                            # beyond what 1-degree spacing resolves
+        assert [x for x in w if 'station spacing' in str(x.message)]
+    assert abs(inv.station_spacing - 0.75) < 0.1                                # 1 deg of longitude at ~42 N
+
+
+def test_running_mean_of_an_inversion_result():
+    from pygwater.inversion.workflow import InversionResult
+    x = np.arange(10.0)[:, None] * np.ones((1, 3))
+    r = InversionResult(basis=None, months=[str(i) for i in range(10)], x=x, alpha=np.ones(10),
+                        n_stations=np.ones(10), fit_rms=np.ones(10), dof=np.ones(10), reference=('0', '9'),
+                        components=('U',))
+    m = r.running_mean(3)
+    assert np.allclose(m.x[1:-1, 0], x[1:-1, 0]) and m.x[0, 0] == 0.5 and m.meta['running_mean'] == 3

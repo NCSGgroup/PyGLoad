@@ -22,7 +22,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from pygwater.preprocessing.series import COMPONENTS, Step, read_tenv3, _decyear_to_month
+from pygwater.preprocessing.series import COMPONENTS, Step, read_tenv3, _decyear_to_month, _decyear_to_day
 from pygwater.preprocessing.trajectory import (trajectory_design, fit_trajectory, seasonal_amplitude, clean_segments,
                                                detect_jumps as find_jumps)
 
@@ -182,6 +182,36 @@ class GNSSNetwork:
         for c in COMPONENTS:
             s.xyz[c], s.sig[c] = s.xyz[c][mask], s.sig[c][mask]
 
+    def daily(self):
+        """
+        Daily epochs instead of monthly means ('YYYY-MM-DD'; the rest of the chain is unchanged). The uncertainty of
+        a day is the station's scatter of daily values about their calendar-month mean (at least the formal sigma):
+        the day-to-day noise, without the seasonal signal. Daily inversions cost about 30 times as many solves as
+        monthly ones; choose the regularisation on a subset of days (MonthlyInversion.choose_alpha(months=...)).
+        """
+        for s in self.stations:
+            keys = np.array([_decyear_to_month(x) for x in s.t])
+            days = [_decyear_to_day(x) for x in s.t]
+            s.monthly_t = days
+            s.monthly_xyz, s.monthly_sig = {}, {}
+            for c in COMPONENTS:
+                v = s.xyz[c]
+                res = np.empty_like(v)
+                for k in set(keys):
+                    sel = keys == k
+                    res[sel] = v[sel] - v[sel].mean()
+                scatter = np.sqrt(np.mean(res ** 2)) if v.size > 1 else 0.0
+                s.monthly_xyz[c] = np.asarray(v, dtype=float).copy()
+                s.monthly_sig[c] = np.maximum(scatter, s.sig[c])
+            # several solutions on one day (rare): keep the first
+            _, first = np.unique(days, return_index=True)
+            if first.size < len(days):
+                first = np.sort(first)
+                s.monthly_t = [days[i] for i in first]
+                for c in COMPONENTS:
+                    s.monthly_xyz[c], s.monthly_sig[c] = s.monthly_xyz[c][first], s.monthly_sig[c][first]
+        return self
+
     def monthly(self, min_days=10, sigma='rms'):
         """
         Calendar-month means. Months with fewer than min_days daily solutions are dropped.
@@ -246,8 +276,9 @@ class GNSSNetwork:
             if nb.size < min_neighbours:
                 s.qc['spatial_filter'] = 'too few neighbours'
                 continue
-            med = np.nanmedian(Y[nb], axis=0)
             cnt = np.sum(np.isfinite(Y[nb]), axis=0)
+            med = np.full(Y.shape[1], np.nan)                # epochs without any neighbour stay NaN (no warning)
+            med[cnt > 0] = np.nanmedian(Y[nb][:, cnt > 0], axis=0)
             use = np.isfinite(Y[j]) & (cnt >= min_neighbours)
             if use.sum() < min_common:
                 s.qc['spatial_filter'] = 'too few common months'
@@ -305,7 +336,8 @@ class GNSSNetwork:
         Monthly anomalies of all stations as arrays, each station relative to its mean over a COMMON reference
         period, so that every station (and the inversion) refers to the same period, as GRACE anomalies do.
         :param reference: ('YYYY-MM', 'YYYY-MM'), first and last month of the reference period (inclusive), e.g.
-                          ('2004-01', '2009-12') for the GRACE baseline. Default: the months in which every station
+                          ('2004-01', '2009-12') for the GRACE baseline; with daily epochs also days, e.g.
+                          ('2017-08-01', '2017-08-24') for the days before an event. Default: the months in which every station
                           has data
         :param min_months: stations with fewer monthly values in the reference period are left out
         :return: GNSSDataset
@@ -318,7 +350,8 @@ class GNSSNetwork:
                 raise ValueError('the stations share no month; give a reference period, e.g. '
                                  "reference=('2004-01', '2009-12')")
         else:
-            ref = {k for k in self.months() if reference[0] <= k <= reference[1]}
+            lo, hi = reference                       # months ('YYYY-MM') or, for daily epochs, days ('YYYY-MM-DD')
+            ref = {k for k in self.months() if lo <= k[:len(lo)] and k[:len(hi)] <= hi}
         st, means = [], []
         for s in self.stations:
             sel = [i for i, k in enumerate(s.monthly_t) if k in ref]
@@ -343,8 +376,11 @@ class GNSSNetwork:
     # --------------------------------------------------------------------------------------------------------------
     def qc_table(self):
         """one row per station (kept and rejected): name, lat, lon, status and the quality-control figures"""
-        rows = [dict(name=s.name, lat=s.lat, lon=s.lon, status='kept', **s.qc) for s in self.stations]
-        rows += [dict(name=n, status='rejected: ' + r) for n, r in self.rejected.items()]
+        kept = {s.name for s in self.stations}
+        rows = [dict(name=s.name, lat=s.lat, lon=s.lon,
+                     status='rejected: ' + self.rejected[s.name] if s.name in self.rejected else 'kept', **s.qc)
+                for s in self.stations]          # stations dropped late (e.g. by to_dataset) keep their QC figures
+        rows += [dict(name=n, status='rejected: ' + r) for n, r in self.rejected.items() if n not in kept]
         return rows
 
     def save_qc(self, path):
@@ -367,6 +403,57 @@ class GNSSDataset:
     sigma: dict                     # same shape [m]
     components: tuple
     reference: tuple                # first and last month of the reference period
+
+    def select(self, box=None, names=None, exclude=None):
+        """
+        A new GNSSDataset with the stations in a box (lat_min, lat_max, lon_min, lon_max), or in `names`, minus `exclude`
+        """
+        import copy
+        keep = np.ones(len(self.names), bool)
+        if box is not None:
+            keep &= (self.lat >= box[0]) & (self.lat <= box[1]) & (self.lon >= box[2]) & (self.lon <= box[3])
+        if names is not None:
+            keep &= np.isin(self.names, list(names))
+        if exclude is not None:
+            keep &= ~np.isin(self.names, list(exclude))
+        out = copy.deepcopy(self)
+        out.names = [n for n, k in zip(self.names, keep) if k]
+        out.lat, out.lon = self.lat[keep], self.lon[keep]
+        out.values = {c: v[:, keep] for c, v in self.values.items()}
+        out.sigma = {c: v[:, keep] for c, v in self.sigma.items()}
+        return out
+
+    def remove_common_mode(self, reference):
+        """
+        Common-mode error removed by stacking (Wdowinski et al., 1997): for every epoch and component, the mean of the
+        reference stations is subtracted from all stations. Use stations far from the load being studied, e.g. for an
+        event in daily data (Milliner et al., 2018 used stations north-west of the Hurricane Harvey rain); for
+        regional seasonal loading, where every station is loaded, use the inversion's common_mode instead.
+        :param reference: (lat_min, lat_max, lon_min, lon_max) box of the reference stations, a boolean mask, or a
+                          list of station names
+        :return: a new GNSSDataset; the removed series is in .meta['common_mode'][component]
+        """
+        import copy
+        if isinstance(reference, (tuple, list)) and len(reference) == 4:
+            ref = (self.lat >= reference[0]) & (self.lat <= reference[1]) & (self.lon >= reference[2]) & \
+                  (self.lon <= reference[3])
+        elif len(reference) and isinstance(next(iter(reference)), str):
+            ref = np.isin(self.names, list(reference))
+        else:
+            ref = np.asarray(reference, bool)
+        if ref.sum() < 3:
+            raise ValueError('only %d reference stations for the common mode' % ref.sum())
+        out = copy.deepcopy(self)
+        out.meta = dict(getattr(self, 'meta', {}) or {})
+        out.meta['common_mode'] = {}
+        for c in self.components:
+            v = self.values[c][:, ref]
+            n = np.isfinite(v).sum(axis=1)
+            cme = np.where(n >= 3, np.nansum(v, axis=1) / np.maximum(n, 1), 0.0)
+            out.values[c] = self.values[c] - cme[:, None]
+            out.meta['common_mode'][c] = cme
+        out.meta['common_mode_stations'] = [nm for nm, k in zip(self.names, ref) if k]
+        return out
 
     def epoch(self, month, components=None):
         """

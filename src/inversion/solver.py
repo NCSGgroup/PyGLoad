@@ -47,8 +47,10 @@ class RegularizedLeastSquares:
         self.Aw = self.A * self.w[:, None]
         self.N = self.Aw.T @ self.Aw
         self.R = np.eye(self.A.shape[1]) if R is None else np.asarray(R, dtype=float)
-        # scale alpha relative to the data: alpha = 1 balances the traces of N and R
-        self.scale = np.trace(self.N) / max(np.trace(self.R), 1e-300)
+        # scale alpha relative to the data: alpha = 1 balances the traces of N and R, over the regularised parameters
+        # only (unregularised extras such as common-mode offsets would otherwise dominate the trace and shift alpha)
+        reg = np.any(self.R != 0, axis=1)
+        self.scale = np.trace(self.N[np.ix_(reg, reg)]) / max(np.trace(self.R), 1e-300)
         # a tiny ridge makes a semi-definite R (e.g. a Laplacian, blind to constants) definite
         n = self.R.shape[0]
         self.Rr = self.R + 1e-10 * max(np.trace(self.R) / n, 1e-300) * np.eye(n)

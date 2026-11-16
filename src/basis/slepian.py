@@ -110,6 +110,11 @@ class SlepianBasis(SphericalHarmonicBasis):
         if resolution is None:
             resolution = np.abs(np.diff(np.unique(lat))).min()
         res = np.deg2rad(resolution)
+        if self.lmax > 90.0 / resolution:
+            import warnings
+            warnings.warn('Slepian L=%d exceeds 90/resolution = %d for a %g-degree grid: the functions are not resolved '
+                          'by the grid, and the load map can break into blotches while the data fit stays good '
+                          '(Yang et al., 2025)' % (self.lmax, int(90.0 / resolution), resolution))
 
         inside = mask > 0
         if not inside.any():

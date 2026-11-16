@@ -50,11 +50,27 @@ def _decyear_to_month(t):
     return str(day.astype('datetime64[M]'))
 
 
+def _decyear_to_day(t):
+    """decimal year -> 'YYYY-MM-DD'"""
+    year = int(np.floor(t))
+    day = np.datetime64('%04d-01-01' % year) + np.timedelta64(int((t - year) * (366 if _is_leap(year) else 365)), 'D')
+    return str(day)
+
+
+def epoch_to_decyear(epoch):
+    """'YYYY-MM' (middle of the month) or 'YYYY-MM-DD' (middle of the day) -> decimal year"""
+    if len(epoch) == 7:
+        return month_to_decyear(epoch)
+    y = int(epoch[:4])
+    doy = (np.datetime64(epoch[:10]) - np.datetime64('%04d-01-01' % y)).astype(int)
+    return y + (doy + 0.5) / (366 if _is_leap(y) else 365)
+
+
 def month_to_decyear(month):
     """'YYYY-MM' -> decimal year of the middle of that month"""
     y, m = int(month[:4]), int(month[5:7])
     start = np.datetime64('%04d-%02d-01' % (y, m))
-    end = start.astype('datetime64[M]') + 1
+    end = start.astype('datetime64[M]') + np.timedelta64(1, 'M')
     mid = (start - np.datetime64('%04d-01-01' % y)).astype(int) + ((end.astype('datetime64[D]') - start).astype(int)) / 2
     return y + mid / (366 if _is_leap(y) else 365)
 

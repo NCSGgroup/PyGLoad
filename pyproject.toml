@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=64"]
+requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -10,7 +10,7 @@ readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
 authors = [{ name = "Fan Yang" }]
-dependencies = ["numpy>=1.24", "scipy>=1.10", "h5py>=3.8", "netCDF4>=1.6"]
+dependencies = ["numpy>=1.24", "scipy>=1.10", "h5py>=3.8", "netCDF4>=1.6", "threadpoolctl>=3"]
 
 [project.optional-dependencies]
 mesh = ["geopandas>=0.13", "shapely>=2.0"]
@@ -28,3 +28,7 @@ packages = ["pygwater", "pygwater.utils", "pygwater.earth", "pygwater.basis", "p
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+# install metadata (pygwater.egg-info) goes to installation/, not the top level
+[tool.distutils.egg_info]
+egg_base = "installation"

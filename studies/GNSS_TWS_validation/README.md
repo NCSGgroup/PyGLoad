@@ -51,8 +51,9 @@ python verify.py                                    # compare with the reference
    region, and by distance to the nearest basin-unit border (< 50 km against interior). The run writes
    `gnss_scores_per_station.csv`, `gnss_summary.csv` and `table_gnss.csv`.
 
-Runtime on a desktop (4 threads): about 20 s per product for the SH analysis (GLDAS-2.2: about 15 min to read the
-5,000 daily files), 1–2 min for the forward model and about 10 s for the scores.
+Runtime on a desktop (4 threads): 13 min for all five products. That is 20–50 s per product for the reading and
+SH analysis, except GLDAS-2.2 at 5–10 min for its 5,000 daily files. The forward model takes 1–2.5 min and the
+scores under 1 min. Rebuilding the GNSS series adds about 10 min with 8 processes.
 
 ## Expected numbers
 
@@ -94,6 +95,20 @@ The station selection (≥ 60 % of the common months, ≥ 5 years) and the exclu
 glacier-dominated basins and large ice fields come from the station list. `run.py --default-cleaning` with
 `GNSS_TWS_GNSS=rebuild` uses `clean()` with its default data selection, offset detection and quality control
 instead. The output suffix is then `_default_cleaning`.
+
+With the steps file of the reference run, `rebuild` reproduces the reference series to 1e-12 mm (4,807 stations,
+685,881 station-months) and the reference scores exactly. The default cleaning keeps 4,682 stations: `clean()`
+rejects 125. Its extra offset detection, segment rules and sigma limits raise every global median a little:
+
+| product | WRMS reduction % (reference -> default cleaning) | r_total | amplitude error factor |
+|---|---|---|---|
+| CSR RL06.3 | 6.1 -> 7.0 | 0.43 -> 0.46 | 1.80 -> 1.74 |
+| JPL RL06.3M | 5.7 -> 6.8 | 0.43 -> 0.45 | 1.80 -> 1.76 |
+| GLWS 2.0 | 3.5 -> 4.4 | 0.40 -> 0.43 | 1.70 -> 1.66 |
+| GLWS 4.0 | 7.2 -> 8.3 | 0.46 -> 0.48 | 1.54 -> 1.51 |
+| GLDAS-2.2 | 2.9 -> 3.6 | 0.41 -> 0.44 | 2.02 -> 1.97 |
+
+The ranking of the products does not change. The reference numbers (first column) remain the reference values of the study.
 
 NGL keeps adding offsets to `steps.txt`. A newer steps file can therefore change a few series.
 

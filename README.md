@@ -36,6 +36,7 @@ Step-by-step instructions are in the [installation guide](doc/installation.md).
 | learn the concepts and all options | [user guide](doc/user_guide.md) |
 | try the basis functions on small cases | [examples/](examples) |
 | invert GNSS for water storage and compare with GRACE | [studies/GNSS_GRACE/](studies/GNSS_GRACE) |
+| validate a monthly water storage product against GNSS vertical loading | [studies/GNSS_TWS_validation/](studies/GNSS_TWS_validation) |
 | reproduce published results | [studies/](studies) |
 
 ## Repository layout
@@ -44,7 +45,7 @@ Step-by-step instructions are in the [installation guide](doc/installation.md).
 |---|---|
 | [src/](src) | the core code, imported as `PyGLoad` |
 | [examples/](examples) | short demonstrations |
-| [studies/](studies) | complete, reproducible studies |
+| [studies/](studies) | complete, reproducible studies: `China`, `Fu2015_PNW`, `GNSS_GRACE`, `GNSS_TWS_validation` |
 | [tests/](tests) | automated tests |
 | [doc/](doc) | installation guide and user guide |
 | [installation/](installation) | environment and data-path settings |

@@ -144,9 +144,9 @@ without any further setting.
 
 ### What is published
 
-Everything in the repository except personal and local files: `src/`, the studies `GNSS_GRACE/`, `Fu2015_PNW/` and
+Everything in the repository except personal and local files: `src/`, the studies `GNSS_GRACE/`, `GNSS_TWS_validation/`, `Fu2015_PNW/` and
 `China/`, `examples/`, `tests/`, `doc/` and `installation/`. Not published (git-ignored):
-`studies/JGR2025_basis_functions/`, `studies/GNSS_TWS_validation/`, `doc/cowork_sync.md`, `Claude outputs/` and
+`studies/JGR2025_basis_functions/`, `doc/cowork_sync.md`, `Claude outputs/` and
 `installation/pygload_paths.cfg`.
 
 See [user_guide.md](user_guide.md) for all options and usage.

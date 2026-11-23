@@ -27,9 +27,8 @@ Thumbs.db
 # Only the local setting of that root is kept here, untracked.
 installation/pygload_paths.cfg
 
-# Personal and local, not published: two working studies, the Cowork <-> Claude Code note, files sent by Claude
+# Personal and local, not published: a working study, the Cowork <-> Claude Code note, files sent by Claude
 studies/JGR2025_basis_functions/
-studies/GNSS_TWS_validation/
 doc/cowork_sync.md
 Claude outputs/
 

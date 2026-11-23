@@ -7,14 +7,14 @@ Results: <data root>/output/inversion_PNW_Fu2015/damping_summary.csv
 import os, sys, time, warnings
 from pathlib import Path
 import numpy as np
-from pygwater.config import FileTool
-from pygwater.basis.green.gf_basis import GreenFunctionBasis
-from pygwater.inversion.solver import RegularizedLeastSquares
-from pygwater.inversion.regularization import area_weighted_identity
+from PyGWater.config import FileTool
+from PyGWater.basis.green.gf_basis import GreenFunctionBasis
+from PyGWater.inversion.solver import RegularizedLeastSquares
+from PyGWater.inversion.regularization import area_weighted_identity
 from synthetic import setup, make_bases, checker, RES, WA_OR, BLOCKS, SIGMA_U, H_RATIO, COMPONENTS
 from slepian import write_csv
-from pygwater.observations.synthetic import add_noise
-from pygwater.utils.enums import Displacement
+from PyGWater.observations.synthetic import add_noise
+from PyGWater.utils.enums import Displacement
 
 
 def run(seed=7):

@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 
 
-from pygwater.config import FileTool
+from PyGWater.config import FileTool
 INPUT = str(FileTool.get_input_dir()) + '/'     # <data root>/input/  (data root: installation/pygwater_paths.cfg)
 CACHE = str(FileTool.get_cache_dir()) + '/'     # <data root>/cache/
 OUTPUT = str(FileTool.get_output_dir()) + '/'   # <data root>/output/
@@ -13,14 +13,14 @@ TEMP = str(FileTool.get_temp_dir()) + '/'   # <data root>/temp/
 import pygmt
 import numpy as np
 
-from pygwater.utils.enums import Displacement
-from pygwater.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
-from pygwater.basis.green.disk_load import DiskLoad, EarthConstant
-from pygwater.forward.disk import GFA_displacement, grid2radius, GFA_regular_grid
+from PyGWater.utils.enums import Displacement
+from PyGWater.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
+from PyGWater.basis.green.disk_load import DiskLoad, EarthConstant
+from PyGWater.forward.disk import GFA_displacement, grid2radius, GFA_regular_grid
 import netCDF4 as nc
 from pathlib import Path
-from pygwater.utils.geomath import GeoMathKit
-from pygwater.forward.disk_cluster import GFA_displacement_from_template
+from PyGWater.utils.geomath import GeoMathKit
+from PyGWater.forward.disk_cluster import GFA_displacement_from_template
 
 
 def demo1_convolve():

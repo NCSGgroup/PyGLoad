@@ -3,16 +3,16 @@ import sys
 from pathlib import Path
 
 
-from pygwater.config import FileTool
+from PyGWater.config import FileTool
 INPUT = str(FileTool.get_input_dir()) + '/'     # <data root>/input/  (data root: installation/pygwater_paths.cfg)
 CACHE = str(FileTool.get_cache_dir()) + '/'     # <data root>/cache/
 OUTPUT = str(FileTool.get_output_dir()) + '/'   # <data root>/output/
 TEMP = str(FileTool.get_temp_dir()) + '/'   # <data root>/temp/
 import pygmt
 import numpy as np
-from pygwater.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
-from pygwater.basis.green.point_load import LGF_Kummer, EarthConstant, LGF_truncation
-from pygwater.basis.green.disk_load import DiskLoad, EarthConstant
+from PyGWater.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
+from PyGWater.basis.green.point_load import LGF_Kummer, EarthConstant, LGF_truncation
+from PyGWater.basis.green.disk_load import DiskLoad, EarthConstant
 
 
 def compare():

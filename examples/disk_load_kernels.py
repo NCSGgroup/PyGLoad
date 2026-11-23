@@ -3,19 +3,19 @@ import sys
 from pathlib import Path
 
 
-from pygwater.config import FileTool
+from PyGWater.config import FileTool
 INPUT = str(FileTool.get_input_dir()) + '/'     # <data root>/input/  (data root: installation/pygwater_paths.cfg)
 CACHE = str(FileTool.get_cache_dir()) + '/'     # <data root>/cache/
 OUTPUT = str(FileTool.get_output_dir()) + '/'   # <data root>/output/
 TEMP = str(FileTool.get_temp_dir()) + '/'   # <data root>/temp/
 import pygmt
 import numpy as np
-from pygwater.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
-from pygwater.basis.green.disk_load import DiskLoad, EarthConstant
+from PyGWater.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
+from PyGWater.basis.green.disk_load import DiskLoad, EarthConstant
 
 
 def demo1():
-    from pygwater.config import FileTool
+    from PyGWater.config import FileTool
     lln = LoveNumber().config(lmax=40000, method=LLN_Data.PREM).get_Love_number()
 
     # file = FileTool.get_input_dir('LLN/PREM-LGFs.dat')
@@ -69,7 +69,7 @@ def demo2():
     :return:
     """
 
-    from pygwater.config import FileTool
+    from PyGWater.config import FileTool
     lmax_list = np.arange(100, 40100, 100)
     radius = 0.1
     thickness = 1
@@ -136,7 +136,7 @@ def demo2():
 
 
 def demo3():
-    from pygwater.config import FileTool
+    from PyGWater.config import FileTool
 
     LLN_list = [LLN_Data.PREM,LLN_Data.PREMhard,LLN_Data.PREMsoft]
     U,V,G={},{},{}

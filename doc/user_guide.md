@@ -58,9 +58,9 @@ of the basis can cause errors as large as those from the assumed Earth structure
 with **identical constants and Love numbers**, so they can be compared and swapped.
 
 ```
-          pygwater.earth: Love numbers (love_numbers.py) + observable table (observables.py)
+          PyGWater.earth: Love numbers (love_numbers.py) + observable table (observables.py)
                                       |
-   pygwater.basis: one interface (base.Basis: design_matrix, predict, load_synthesis, load_parameters)
+   PyGWater.basis: one interface (base.Basis: design_matrix, predict, load_synthesis, load_parameters)
      +--------------------------------+-------------------------------+
      |                                |                               |
  SphericalHarmonic                GreenFunction                     Slepian
@@ -69,7 +69,7 @@ with **identical constants and Love numbers**, so they can be compared and swapp
      |                                |                               |
      +--------------------------------+-------------------------------+
                                       |
-   pygwater.forward: ForwardModel (any basis -> any observable at any point; stacked operators for inversion)
+   PyGWater.forward: ForwardModel (any basis -> any observable at any point; stacked operators for inversion)
                 + grid convolutions (point mass, disk, clustered disk) for large global grids
 ```
 
@@ -80,22 +80,22 @@ with **identical constants and Love numbers**, so they can be compared and swapp
 See [installation.md](installation.md) for the environment, the external data (Love numbers in `<data root>/input/LLN/`,
 data root set in `installation/pygwater_paths.cfg` or by `PYGWATER_DATA`) and how to run the code.
 
-After `pip install -e .` the library (folder `src/`) is imported as `pygwater`. The main classes are available at
-the top level (`import pygwater as pgw`: `pgw.LoveNumber`, `pgw.GreenFunctionBasis`, `pgw.SlepianBasis`,
+After `pip install -e .` the repository folder is the package `PyGWater`. The main classes are available at
+the top level (`import PyGWater as pgw`: `pgw.LoveNumber`, `pgw.GreenFunctionBasis`, `pgw.SlepianBasis`,
 `pgw.ForwardModel`, `pgw.RegularizedLeastSquares`, `pgw.Displacement`, ...); the subpackages are:
 
 | Package (folder) | Content |
 |---|---|
-| `pygwater.config` (`src/config.py`) | data root: `FileTool.get_input_dir()`, `get_cache_dir()`, `get_output_dir()`, ... |
-| `pygwater.earth` | load Love numbers (`love_numbers.py`) and observable definitions (`observables.py`) |
-| `pygwater.basis` | common interface `base.py` (class `Basis`); `slepian.py` (class `SlepianBasis`) |
-| `pygwater.basis.spherical_harmonic` | `data_class.py` (SHC, GRID), `harmonic.py`, `convert_shc.py`, `sh_basis.py` |
-| `pygwater.basis.green` | Legendre polynomials, point-load (`point_load.py`) and disk-load (`disk_load.py`) kernels, `gf_basis.py` |
-| `pygwater.forward` | `model.py` (`ForwardModel`, any basis) and grid convolutions `point_mass.py`, `disk.py`, `disk_cluster.py` |
-| `pygwater.inversion` | `solver.py` (`RegularizedLeastSquares`), `regularization.py` |
-| `pygwater.observations` | `gnss.py` (NGL time series), `synthetic.py` (networks, noise, checkerboards) |
-| `pygwater.mesh` | `regular_grid.py`, `shape_mask.py` |
-| `pygwater.utils` | `constants.py`, `enums.py`, `geomath.py`, `mathtool.py` |
+| `PyGWater.config` (`config.py`) | data root: `FileTool.get_input_dir()`, `get_cache_dir()`, `get_output_dir()`, ... |
+| `PyGWater.earth` | load Love numbers (`love_numbers.py`) and observable definitions (`observables.py`) |
+| `PyGWater.basis` | common interface `base.py` (class `Basis`); `slepian.py` (class `SlepianBasis`) |
+| `PyGWater.basis.spherical_harmonic` | `data_class.py` (SHC, GRID), `harmonic.py`, `convert_shc.py`, `sh_basis.py` |
+| `PyGWater.basis.green` | Legendre polynomials, point-load (`point_load.py`) and disk-load (`disk_load.py`) kernels, `gf_basis.py` |
+| `PyGWater.forward` | `model.py` (`ForwardModel`, any basis) and grid convolutions `point_mass.py`, `disk.py`, `disk_cluster.py` |
+| `PyGWater.inversion` | `solver.py` (`RegularizedLeastSquares`), `regularization.py` |
+| `PyGWater.observations` | `gnss.py` (NGL time series), `synthetic.py` (networks, noise, checkerboards) |
+| `PyGWater.mesh` | `regular_grid.py`, `shape_mask.py` |
+| `PyGWater.utils` | `constants.py`, `enums.py`, `geomath.py`, `mathtool.py` |
 
 Scripts outside the library: `examples/` (one feature each) and `studies/` (reproducible studies, e.g.
 `studies/GNSS_GRACE/` for GNSS-derived water storage compared with GRACE).
@@ -106,7 +106,7 @@ Scripts outside the library: `examples/` (one feature each) and `studies/` (repr
 
 - **Grids.** Global regular grids are cell-centred: latitudes `-90 + res/2 ... 90 - res/2` (south to north),
   longitudes `-180 + res/2 ... 180 - res/2`, as returned by `GeoMathKit.global_equal_distance_grid(res)`.
-  Spherical-harmonic analysis expects this layout. Masks written by `pygwater.mesh` run north to south; the Slepian
+  Spherical-harmonic analysis expects this layout. Masks written by `PyGWater.mesh` run north to south; the Slepian
   module accepts any ordering.
 - **Units.** SI throughout: displacement and geoid in metres, gravity in m/s^2 (1 microGal = 1e-8 m/s^2), angles in
   degrees, areas in m^2, loads in metres of EWH unless a function says otherwise.
@@ -123,8 +123,8 @@ Scripts outside the library: `examples/` (one feature each) and `studies/` (repr
 ## 4. Load Love numbers
 
 ```python
-from pygwater.earth.love_numbers import LoveNumber
-from pygwater.utils.enums import LLN_Data, LLN_variable, Frame
+from PyGWater.earth.love_numbers import LoveNumber
+from PyGWater.utils.enums import LLN_Data, LLN_variable, Frame
 
 lln = LoveNumber().config(lmax=1000, method=LLN_Data.PREM).get_Love_number()
 h = lln.LLN[LLN_variable.h]          # h_0 ... h_1000 (numpy array)
@@ -143,8 +143,8 @@ Data are read on `get_Love_number()` or on first access to `.LLN`. Degree 0: h_0
 
 ## 5. Observables
 
-Observables are members of `pygwater.utils.enums.Displacement` (alias `Observables.Observable`). Their
-definitions live in **one** table, `src/earth/observables.py`, which spherical harmonics and Slepian functions
+Observables are members of `PyGWater.utils.enums.Displacement` (alias `Observables.Observable`). Their
+definitions live in **one** table, `earth/observables.py`, which spherical harmonics and Slepian functions
 read. Green's-function kernels implement each observable individually.
 
 | `variable` | Quantity | Unit | Extra options | SH | Slepian | Point LGF | D-LGF / CD-LGF |
@@ -172,7 +172,7 @@ model Earth, so that (g/a) F_n = 4 pi G rho_w/(2n+1) exactly.
 Low-level access:
 
 ```python
-from pygwater.earth import observables as Observables
+from PyGWater.earth import observables as Observables
 Observables.love_factor(variable, lln, n, newtonian='below', height=0.0)   # per-degree factor X_n
 Observables.kind(variable)                                                  # 'value' | 'north' | 'east'
 Observables.sh_synthesis(load_cqlm, load_sqlm, lln, variable, lat, lon, **kwargs)
@@ -188,9 +188,9 @@ Analysis of the **load** grid, then synthesis of any observable (synthesis only;
 
 ```python
 import numpy as np
-from pygwater.basis.spherical_harmonic.data_class import GRID
-from pygwater.utils.enums import PhysicalDimensions, Displacement
-from pygwater.utils.geomath import GeoMathKit
+from PyGWater.basis.spherical_harmonic.data_class import GRID
+from PyGWater.utils.enums import PhysicalDimensions, Displacement
+from PyGWater.utils.geomath import GeoMathKit
 
 res = 2.0
 lat, lon = GeoMathKit.global_equal_distance_grid(res)      # cell centres, south->north, -180->180
@@ -232,8 +232,8 @@ Truncated series G(alpha) = a/M sum_{n<=N} h_n P_n(cos alpha) (Eq. 7). Equivalen
 matches the load resolution (N = 180/res); larger N aliases (Sect. 4 of the paper).
 
 ```python
-from pygwater.forward.point_mass import GFA_displacement, Grids_generation
-from pygwater.utils.constants import EarthConstant
+from PyGWater.forward.point_mass import GFA_displacement, Grids_generation
+from PyGWater.utils.constants import EarthConstant
 
 grids = Grids_generation.Equal_angular_distance(resolution=res)       # 'lat', 'lon', 'area' (m^2), flattened
 grids['EWH'] = ewh.reshape(-1, 1) * EarthConstant.rhow                # kg/m^2 !  shape (Ncell, Ntime)
@@ -257,7 +257,7 @@ g = fm.evaluation(points=stations, variable=Displacement.Gravity)       # m/s^2
 | `.evaluation(points, variable, resolution=2)` | `resolution` = grid spacing in degrees |
 
 ```python
-from pygwater.forward.point_mass import GFA_regular_grid
+from PyGWater.forward.point_mass import GFA_regular_grid
 lo2, la2 = np.meshgrid(lon, lat)
 fm = GFA_regular_grid(lln90)
 fm.configure(grids=grids)
@@ -271,7 +271,7 @@ Kernels per kg of load as a function of angular distance (degrees). `LGF_truncat
 `LGF_Kummer` adds the closed-form asymptotic part (Eq. 14), which converges for any N (Fig. 3 of the paper).
 
 ```python
-from pygwater.basis.green.point_load import LGF_Kummer, LGF_truncation
+from PyGWater.basis.green.point_load import LGF_Kummer, LGF_truncation
 lln10k = LoveNumber().config(lmax=10000, method=LLN_Data.PREM).get_Love_number()
 k = LGF_Kummer(lln10k).configure(residence=np.array([0.1, 1.0, 10.0]))   # angular distance, degree
 print(k.getVertical(), k.getHorizental(), k.getGeoidheight(), k.getGravity())  # per kg of load
@@ -294,8 +294,8 @@ A uniform disk of thickness 1 m EWH (Eqs. 16-21). The expansion must satisfy Eq.
 N >= max(2 x 360/radius, 10 000) (`DiskLoad.required_lmax(radius)`); a `UserWarning` is issued otherwise.
 
 ```python
-from pygwater.basis.green.disk_load import DiskLoad
-from pygwater.forward.disk import GFA_displacement as DiskForward, grid2radius
+from PyGWater.basis.green.disk_load import DiskLoad
+from PyGWater.forward.disk import GFA_displacement as DiskForward, grid2radius
 print(DiskLoad.required_lmax(0.5))
 radius = grid2radius(lat_center=grids['lat'], grid_size=res)[0]           # equal-area disk radius, degree
 dgrid = {'lat': grids['lat'], 'lon': grids['lon'], 'radius': radius, 'EWH': ewh.reshape(-1, 1)}  # EWH in metre
@@ -324,7 +324,7 @@ series per radius, step radius/200 across the disk and its edge) and interpolate
 2-deg mascon grid of 25 cells with 0.1-deg sub-cells (N = 13 000) takes about 4 s for 200 stations.
 
 ```python
-from pygwater.basis.green.gf_basis import GreenFunctionBasis
+from PyGWater.basis.green.gf_basis import GreenFunctionBasis
 lln13k = LoveNumber().config(lmax=13000, method=LLN_Data.PREM).get_Love_number()      # Eq. 24 for 0.1-deg sub-cells
 lat, lon = GeoMathKit.global_equal_distance_grid(2.0)
 lo2, la2 = np.meshgrid(lon, lat)
@@ -342,7 +342,7 @@ returns the sub-disk centres and radii of cell j.
 per latitude row, saved, and reused by rolling along longitude on a regular grid.
 
 ```python
-from pygwater.forward.disk_cluster import cluster_disk, GFA_displacement_from_template
+from PyGWater.forward.disk_cluster import cluster_disk, GFA_displacement_from_template
 cd = cluster_disk(lln2k)
 cd.configure(grid={'lat': 45.0, 'lon': 5.0, 'delta_lat': 2.0, 'delta_lon': 2.0}, small_disk=0.5)
 tpl = cd.template(points=stations, variable=Displacement.Vertical, postfix='demo')   # -> <data root>/cache/LGD_template
@@ -363,7 +363,7 @@ Band-limited functions concentrated in a region (Sect. 8 of the paper). Built fr
 regular grid; use a mask clearly finer than 180/L degrees.
 
 ```python
-from pygwater.basis.slepian import SlepianBasis
+from PyGWater.basis.slepian import SlepianBasis
 L = 30
 lo2, la2 = np.meshgrid(*GeoMathKit.global_equal_distance_grid(0.5)[::-1])
 mask = (la2 > 35) & (la2 < 70) & (lo2 > -10) & (lo2 < 40)                 # any 0/1 (or fractional) mask
@@ -381,7 +381,7 @@ u_sl = sb.forward(c, s, llnL, stations['lat'], stations['lon'], variable=Displac
 |---|---|
 | `SlepianBasis(lmax)` | band limit L; coefficients ordered by degree, then cos m = 0..n, then sin m = 1..n |
 | `.configure(mask, lat, lon, resolution=None)` | concentration matrix (Eq. 28) and eigen-decomposition; `.beta` (descending), `.G` |
-| `SlepianBasis.from_mask_h5(lmax, h5file, dataset='basin')` | build from a `pygwater.mesh` mask file |
+| `SlepianBasis.from_mask_h5(lmax, h5file, dataset='basin')` | build from a `PyGWater.mesh` mask file |
 | `.shannon` | Shannon number (L+1)^2 A/(4 pi) |
 | `.truncate(Lc=None, beta_min=None, shannon=False)` | number of retained functions (exactly one option) |
 | `.forward(load_c, load_s, lln, lat, lon, variable, **kw)` | any observable of Section 5 at points (Eqs. 29-31) |
@@ -396,7 +396,7 @@ The concentration matrix has (L+1)^4 entries: practical up to L ~ 80-100.
 ### 6.7 Common interface and ForwardModel
 
 Every basis is a linear parameterisation of the load, EWH(Omega) = sum_j x_j phi_j(Omega), with the operator that maps
-x to any observable at any point: d = A x. All bases derive from `pygwater.basis.base.Basis`:
+x to any observable at any point: d = A x. All bases derive from `PyGWater.basis.base.Basis`:
 
 | Method | Returns |
 |---|---|
@@ -409,9 +409,9 @@ x to any observable at any point: d = A x. All bases derive from `pygwater.basis
 
 | Basis | Parameters x | Constructor |
 |---|---|---|
-| `SphericalHarmonicBasis(lmax)` | SH coefficients of EWH, (L+1)^2 (ordering: degree, cosine m=0..n, sine m=1..n) | `src/basis/spherical_harmonic/sh_basis.py` |
-| `SlepianBasis(lmax).configure(mask, lat, lon).truncate(...)` | Slepian coefficients of EWH, Lc | `src/basis/slepian.py` |
-| `GreenFunctionBasis.from_grid(lat, lon, res, mask=None, kernel='point_mass' \| 'disk' \| 'cluster_disk', subgrid=0.1)` | EWH per cell | `src/basis/green/gf_basis.py` |
+| `SphericalHarmonicBasis(lmax)` | SH coefficients of EWH, (L+1)^2 (ordering: degree, cosine m=0..n, sine m=1..n) | `basis/spherical_harmonic/sh_basis.py` |
+| `SlepianBasis(lmax).configure(mask, lat, lon).truncate(...)` | Slepian coefficients of EWH, Lc | `basis/slepian.py` |
+| `GreenFunctionBasis.from_grid(lat, lon, res, mask=None, kernel='point_mass' \| 'disk' \| 'cluster_disk', subgrid=0.1)` | EWH per cell | `basis/green/gf_basis.py` |
 
 `load_parameters` performs SH analysis (`method='auto'`, see 6.1) for the SH basis, SH analysis followed by projection
 onto the retained Slepian functions for the Slepian basis, and samples the grid at the cell centres for the
@@ -419,12 +419,12 @@ Green's-function basis. `GreenFunctionBasis.load_synthesis` is piecewise constan
 0 outside). The disk kernel is evaluated from a `DiskLoadTable` by default (`tabulate=True`, ~1e-5 of the peak;
 `tabulate=False` sums the series directly). For the disk kernel the Love numbers must satisfy Eq. 24, and gravity is not available (6.4).
 
-`pygwater.forward.model` wraps any basis:
+`PyGWater.forward.model` wraps any basis:
 
 ```python
-from pygwater.basis.spherical_harmonic.sh_basis import SphericalHarmonicBasis
-from pygwater.basis.green.gf_basis import GreenFunctionBasis
-from pygwater.forward.model import ForwardModel
+from PyGWater.basis.spherical_harmonic.sh_basis import SphericalHarmonicBasis
+from PyGWater.basis.green.gf_basis import GreenFunctionBasis
+from PyGWater.forward.model import ForwardModel
 
 basis = GreenFunctionBasis.from_grid(lat, lon, res, mask=ewh > 0, kernel='point_mass')   # or SphericalHarmonicBasis(90)
 fm = ForwardModel(basis, lln)
@@ -434,7 +434,7 @@ A = fm.design_matrix(sta_lat, sta_lon, observables=(Displacement.Vertical, 'LOS'
 ```
 
 `run` returns a dict {observable: values}; `design_matrix` stacks the observables row-wise (observable by
-observable). The grid convolutions in `src/forward/point_mass.py`, `disk.py` and `disk_cluster.py` remain the faster
+observable). The grid convolutions in `forward/point_mass.py`, `disk.py` and `disk_cluster.py` remain the faster
 choice for global grids; `disk_cluster.py` keeps the template route of the CD-LGF.
 
 ---
@@ -457,7 +457,7 @@ error of several millimetres for vertical displacement (Sect. 8.3).
 ## 8. InSAR line of sight
 
 ```python
-from pygwater.earth import observables as Observables
+from PyGWater.earth import observables as Observables
 look = Observables.look_vector(incidence=39.0, heading=-12.0)        # Sentinel-1 ascending, right-looking
 east = shc.synthesis_observable(res, Displacement.East).value
 los = Observables.line_of_sight(east, north, up, look)                # positive = towards the satellite
@@ -474,15 +474,15 @@ los = Observables.line_of_sight(east, north, up, look)                # positive
 ## 9. Inversion
 
 Forward models are linear, d = A x, and every basis provides A through the common interface (6.7).
-`pygwater.inversion` solves the regularised weighted least-squares problem
+`PyGWater.inversion` solves the regularised weighted least-squares problem
 
     min_x  || W (A x - d) ||^2 + alpha x^T R x ,     W = diag(1 / sigma)
 
 ```python
-from pygwater.basis.green.gf_basis import GreenFunctionBasis
-from pygwater.forward.model import ForwardModel
-from pygwater.inversion.solver import RegularizedLeastSquares
-from pygwater.inversion.regularization import smoothness
+from PyGWater.basis.green.gf_basis import GreenFunctionBasis
+from PyGWater.forward.model import ForwardModel
+from PyGWater.inversion.solver import RegularizedLeastSquares
+from PyGWater.inversion.regularization import smoothness
 
 basis = GreenFunctionBasis.from_grid(lat, lon, 2.0, mask=domain, kernel='cluster_disk', subgrid=0.2)   # mascons
 A = ForwardModel(basis, lln13k).design_matrix(sta_lat, sta_lon, observables=(Displacement.Vertical,
@@ -505,7 +505,7 @@ Rm, Cx = solver.resolution_matrix(alpha), solver.covariance(alpha)
 | `Regularization.smoothness(lat, lon, res)` | first differences between neighbouring cells (graph Laplacian), mascon bases |
 | `Regularization.area_weighted_identity(lat)` | mean-square EWH over the cells |
 
-`src/observations/synthetic.py` provides `synthetic_network` (Poisson-disk station positions inside a region), `add_noise`
+`observations/synthetic.py` provides `synthetic_network` (Poisson-disk station positions inside a region), `add_noise`
 and `checkerboard` for closed-loop tests; `studies/China/inversion.py` runs closed-loop and checkerboard
 tests over China for CD-LGF, point-mass and Slepian bases.
 
@@ -518,12 +518,12 @@ plausible = lambda x: np.sqrt(np.mean(basis.load_synthesis(x, cell_lat, cell_lon
 alpha, curve = solver.choose_alpha(d, method='gcv', plausible=plausible)
 ```
 
-### 9.1 GNSS preprocessing (`pygwater.preprocessing`)
+### 9.1 GNSS preprocessing (`PyGWater.preprocessing`)
 
 From daily NGL series to a monthly data set, following the data selection of Schumacher et al. (2018):
 
 ```python
-from pygwater.preprocessing import GNSSNetwork, read_ngl_steps
+from PyGWater.preprocessing import GNSSNetwork, read_ngl_steps
 net = GNSSNetwork.from_files(tenv3_files).select(box=(41, 50, -125, -116))
 net.clean(steps=read_ngl_steps('steps.txt', as_events=True), min_years=4)   # offsets, trajectory, QC
 net.monthly().spatial_filter(radius_km=500)                                # monthly means, neighbour test
@@ -544,8 +544,8 @@ Frame: NGL series are in IGS14/IGS20; use Love numbers in the CF frame (`LoveNum
 ### 9.2 Monthly inversion and comparison with GRACE
 
 ```python
-from pygwater.inversion.workflow import MonthlyInversion
-from pygwater.observations.grace import Mascon, compare
+from PyGWater.inversion.workflow import MonthlyInversion
+from PyGWater.observations.grace import Mascon, compare
 inv = MonthlyInversion(basis, lln, ds, components=('U',), R=regularization.curvature(lat, lon, res))
 res = inv.run(inv.choose_alpha(method='gcv'))              # one alpha: median of the monthly GCV choices
 s = res.regional_series(glat, glon, inside)                # area-weighted mean EWH [m]; regional_mass() in Gt
@@ -561,7 +561,7 @@ takes seconds. Any basis works. The whole chain, with settings in one file, is `
 
 ## 10. Regional masks
 
-`src/mesh/shape_mask.py` (requires geopandas and shapely):
+`mesh/shape_mask.py` (requires geopandas and shapely):
 
 | Class / function | Purpose |
 |---|---|
@@ -574,7 +574,7 @@ takes seconds. Any basis works. The whole chain, with settings in one file, is `
 
 ## 11. Physical constants
 
-`src/utils/constants.py` is the single source of truth, used by every basis:
+`utils/constants.py` is the single source of truth, used by every basis:
 
 | Constant | Value | Note |
 |---|---|---|
@@ -598,7 +598,7 @@ python studies/China/inversion.py           # closed-loop and checkerboard inver
 ```
 
 `tests/test_basis.py` checks the common interface: point-wise SH basis against grid synthesis, Slepian (all
-functions retained) against SH, the Green's-function basis against the grid convolutions of `pygwater.forward`, agreement
+functions retained) against SH, the Green's-function basis against the grid convolutions of `PyGWater.forward`, agreement
 of SH and point-mass forward models, LOS and load synthesis. `tests/test_consistency.py` checks the constants, Love-number frames, kernel shapes, north/east projection, the
 spherical-harmonic schemes, Slepian equivalence for every observable, the gravity kernel against Wang et al. (2012)
 and the above/below gravity relation.

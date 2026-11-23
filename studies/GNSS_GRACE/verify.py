@@ -11,12 +11,12 @@ Checks of a GNSS_GRACE run (after run.py), written to <data root>/output/GNSS_GR
 """
 import numpy as np
 
-import pygwater as pgw
-from pygwater.config import FileTool
-from pygwater.preprocessing import GNSSDataset
-from pygwater.observations.grace import Mascon
-from pygwater.mesh.land import land_fraction
-from pygwater.utils.constants import EarthConstant
+import PyGWater as pgw
+from PyGWater.config import FileTool
+from PyGWater.preprocessing import GNSSDataset
+from PyGWater.observations.grace import Mascon
+from PyGWater.mesh.land import land_fraction
+from PyGWater.utils.constants import EarthConstant
 
 from config import CONFIG as C
 

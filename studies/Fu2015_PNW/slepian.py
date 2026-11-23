@@ -25,14 +25,14 @@ from pathlib import Path
 
 import numpy as np
 
-from pygwater.config import FileTool
-from pygwater.utils.enums import Displacement
-from pygwater.utils.constants import EarthConstant
-from pygwater.basis.green.gf_basis import GreenFunctionBasis
-from pygwater.basis.slepian import SlepianBasis
-from pygwater.inversion.solver import RegularizedLeastSquares
-from pygwater.inversion.regularization import curvature
-from pygwater.observations.synthetic import add_noise
+from PyGWater.config import FileTool
+from PyGWater.utils.enums import Displacement
+from PyGWater.utils.constants import EarthConstant
+from PyGWater.basis.green.gf_basis import GreenFunctionBasis
+from PyGWater.basis.slepian import SlepianBasis
+from PyGWater.inversion.solver import RegularizedLeastSquares
+from PyGWater.inversion.regularization import curvature
+from PyGWater.observations.synthetic import add_noise
 from synthetic import setup, checker, RES, WA_OR, BLOCKS, SIGMA_U, H_RATIO, COMPONENTS
 from real_data import SIGMA_U as SIGMA_REAL
 

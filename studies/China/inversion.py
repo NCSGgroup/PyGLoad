@@ -14,7 +14,7 @@ Inversion
     parameters: 2-deg cells within BUFFER deg of China (mascons), or Slepian functions concentrated on that domain
     bases     : CD-LGF 0.2 (consistent with the truth), finite LGF 90 (point masses), Slepian L = 60 (beta > 0.1)
     data      : vertical only ('U') or three components ('UNE')
-    solver    : pygwater.inversion.solver.RegularizedLeastSquares; R = first-difference smoothness (mascons) or identity
+    solver    : PyGWater.inversion.solver.RegularizedLeastSquares; R = first-difference smoothness (mascons) or identity
                 (Slepian); alpha by GCV on the noisy data (option: 'wgcv', 'lcurve'); the 'oracle' alpha with
                 the smallest true error is reported alongside, to separate parameter choice from basis effects;
                 safeguard: only alphas giving a recovered EWH RMS below MAX_EWH_RMS (30 cm; CSR gives 11.5 cm) are eligible
@@ -32,15 +32,15 @@ from pathlib import Path
 
 import numpy as np
 
-from pygwater.config import FileTool
-from pygwater.utils.enums import LLN_Data, Displacement
-from pygwater.utils.geomath import GeoMathKit
-from pygwater.earth.love_numbers import LoveNumber
-from pygwater.basis.green.gf_basis import GreenFunctionBasis
-from pygwater.basis.slepian import SlepianBasis
-from pygwater.inversion.solver import RegularizedLeastSquares
-from pygwater.inversion.regularization import smoothness, identity
-from pygwater.observations.synthetic import synthetic_network, add_noise, checkerboard
+from PyGWater.config import FileTool
+from PyGWater.utils.enums import LLN_Data, Displacement
+from PyGWater.utils.geomath import GeoMathKit
+from PyGWater.earth.love_numbers import LoveNumber
+from PyGWater.basis.green.gf_basis import GreenFunctionBasis
+from PyGWater.basis.slepian import SlepianBasis
+from PyGWater.inversion.solver import RegularizedLeastSquares
+from PyGWater.inversion.regularization import smoothness, identity
+from PyGWater.observations.synthetic import synthetic_network, add_noise, checkerboard
 from basis_comparison import china_mask, load_mascon
 
 RES = 2.0

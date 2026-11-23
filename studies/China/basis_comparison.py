@@ -8,7 +8,7 @@ Model  : PREM load Love numbers (Wang et al., 2012), CE frame.
 Output : vertical, north and east displacement at the points for each basis; saved to
          <data root>/output/China_basis_comparison/results.npz (+ a summary printed and written as CSV).
 
-Bases (all through the common Basis interface of pygwater.basis):
+Bases (all through the common Basis interface of PyGWater.basis):
     SH90            spherical harmonics, L = 90 (analysis 'auto'), = Nyquist of the 2-deg load
     finite LGF 90   point masses, Love numbers to n = 90  (equivalent to SH90, Sect. 4)
     finite LGF 360  point masses, Love numbers to n = 360 (truncation beyond the load resolution)
@@ -30,13 +30,13 @@ from pathlib import Path
 
 import numpy as np
 
-from pygwater.config import FileTool
-from pygwater.utils.enums import LLN_Data, Displacement
-from pygwater.utils.geomath import GeoMathKit
-from pygwater.earth.love_numbers import LoveNumber
-from pygwater.basis.spherical_harmonic.sh_basis import SphericalHarmonicBasis
-from pygwater.basis.green.gf_basis import GreenFunctionBasis
-from pygwater.basis.slepian import SlepianBasis
+from PyGWater.config import FileTool
+from PyGWater.utils.enums import LLN_Data, Displacement
+from PyGWater.utils.geomath import GeoMathKit
+from PyGWater.earth.love_numbers import LoveNumber
+from PyGWater.basis.spherical_harmonic.sh_basis import SphericalHarmonicBasis
+from PyGWater.basis.green.gf_basis import GreenFunctionBasis
+from PyGWater.basis.slepian import SlepianBasis
 
 RES_LOAD = 2.0          # load grid [deg]
 RES_PTS = 1.0           # evaluation grid [deg]

@@ -6,15 +6,15 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 
-# PyGWater's code is the folder src/, imported as `pygwater`. Normally it is installed (`pip install -e .`); if not,
-# register src/ under that name so that the tests also run from a plain checkout (e.g. on GitHub CI).
+# The repository folder is the package PyGWater. Normally it is installed (`pip install -e .`); if not, register the
+# folder under that name so that the tests also run from a plain checkout (e.g. on GitHub CI).
 try:
-    import pygwater  # noqa: F401
+    import PyGWater  # noqa: F401
 except ImportError:
-    spec = importlib.util.spec_from_file_location('pygwater', ROOT / 'src' / '__init__.py',
-                                                  submodule_search_locations=[str(ROOT / 'src')])
+    spec = importlib.util.spec_from_file_location('PyGWater', ROOT / '__init__.py',
+                                                  submodule_search_locations=[str(ROOT)])
     module = importlib.util.module_from_spec(spec)
-    sys.modules['pygwater'] = module
+    sys.modules['PyGWater'] = module
     spec.loader.exec_module(module)
 
 _NEEDS_LLN = ('test_consistency.py', 'test_basis.py', 'test_workflow.py')
@@ -22,7 +22,7 @@ _NEEDS_LLN = ('test_consistency.py', 'test_basis.py', 'test_workflow.py')
 
 def pytest_collection_modifyitems(config, items):
     """Tests that read the Love numbers are skipped when <data root>/input/LLN is missing (e.g. on GitHub CI)."""
-    from pygwater.config import FileTool
+    from PyGWater.config import FileTool
     try:
         if (FileTool.get_input_dir('LLN') / 'PREM-LLNs-complete.dat').exists():
             return

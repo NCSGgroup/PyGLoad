@@ -7,8 +7,8 @@ Run on a computer with internet access:
 Files go to <data root>/input/gnss/NGL/ (DataHoldings.txt, steps.txt, tenv3/SITE.tenv3); files already present are
 skipped, so the script can be re-run to complete a download. The region and period are those of config.py.
 """
-from pygwater.config import FileTool
-from pygwater.preprocessing import ngl
+from PyGWater.config import FileTool
+from PyGWater.preprocessing import ngl
 
 from config import CONFIG
 

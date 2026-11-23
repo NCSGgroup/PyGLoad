@@ -27,11 +27,11 @@ from pathlib import Path
 
 import numpy as np
 
-from pygwater.config import FileTool
-from pygwater.utils.enums import Displacement
-from pygwater.utils.constants import EarthConstant
-from pygwater.inversion.solver import RegularizedLeastSquares
-from pygwater.inversion.regularization import curvature
+from PyGWater.config import FileTool
+from PyGWater.utils.enums import Displacement
+from PyGWater.utils.constants import EarthConstant
+from PyGWater.inversion.solver import RegularizedLeastSquares
+from PyGWater.inversion.regularization import curvature
 from synthetic import setup, make_bases, RES, WA_OR
 
 SIGMA_U = 1.5e-3  # [m] assumed error of a site's mean seasonal uplift (GPS + digitising); Fu et al. quote none.

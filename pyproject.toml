@@ -3,7 +3,7 @@ requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pygwater"
+name = "PyGWater"
 version = "0.9.0"
 description = "Elastic loading deformation (GNSS, geoid, gravity) from surface water loads: forward modelling and inversion with a choice of basis functions"
 readme = "README.md"
@@ -21,30 +21,33 @@ figures = ["pygmt"]
 [project.urls]
 Repository = "https://github.com/NCSGgroup/PyGWater"
 
-# The released package is the whole public repository: the library (src/) is imported as `pygwater`; the published
-# studies, examples, tests, documentation and installation files ship inside it as pygwater.studies, pygwater.examples,
-# pygwater.tests, pygwater.doc and pygwater.installation, without moving any folder. Personal files and the local-only
-# studies (JGR2025_basis_functions, GNSS_TWS_validation) are not published (see .gitignore).
-# Details: doc/installation.md, "What the installed package contains".
+# The repository folder PyGWater/ is itself the package: `import PyGWater` loads __init__.py at the top, the library
+# subpackages (basis, earth, forward, ...) sit next to the published studies, examples, tests, documentation and
+# installation files, which are PyGWater.studies, PyGWater.examples, PyGWater.tests, PyGWater.doc and
+# PyGWater.installation. Personal files and the local-only studies (JGR2025_basis_functions, GNSS_TWS_validation) are
+# not published (see .gitignore).
 [tool.setuptools]
-package-dir = { "pygwater" = "src", "pygwater.studies" = "studies", "pygwater.examples" = "examples", "pygwater.tests" = "tests", "pygwater.doc" = "doc", "pygwater.installation" = "installation" }
-packages = ["pygwater", "pygwater.utils", "pygwater.earth", "pygwater.basis", "pygwater.basis.spherical_harmonic",
-            "pygwater.basis.green", "pygwater.forward", "pygwater.inversion", "pygwater.observations", "pygwater.preprocessing", "pygwater.mesh",
-            "pygwater.studies", "pygwater.studies.China", "pygwater.studies.Fu2015_PNW", "pygwater.studies.GNSS_GRACE",
-            "pygwater.examples", "pygwater.tests", "pygwater.doc", "pygwater.installation"]
+package-dir = { "PyGWater" = "." }
+packages = ["PyGWater", "PyGWater.utils", "PyGWater.earth", "PyGWater.basis", "PyGWater.basis.spherical_harmonic",
+            "PyGWater.basis.green", "PyGWater.forward", "PyGWater.inversion", "PyGWater.observations", "PyGWater.preprocessing", "PyGWater.mesh",
+            "PyGWater.studies", "PyGWater.studies.China", "PyGWater.studies.Fu2015_PNW", "PyGWater.studies.GNSS_GRACE",
+            "PyGWater.examples", "PyGWater.tests", "PyGWater.doc", "PyGWater.installation"]
 
 [tool.setuptools.package-data]
 "*" = ["*.md", "*.json", "*.txt", "*.csv"]
-"pygwater.installation" = ["environment.yml", "requirements.txt", "pygwater_paths.cfg.example"]
+"PyGWater.installation" = ["environment.yml", "requirements.txt", "pygwater_paths.cfg.example"]
 
 # personal and local files are never released (they are also git-ignored)
 [tool.setuptools.exclude-package-data]
-"pygwater.doc" = ["cowork_sync.md"]
-"pygwater.installation" = ["pygwater_paths.cfg", "pygwater.egg-info/*"]
+"PyGWater.doc" = ["cowork_sync.md"]
+"PyGWater.installation" = ["pygwater_paths.cfg", "PyGWater.egg-info/*", "build/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 
-# install metadata (pygwater.egg-info) goes to installation/, not the top level
+# install metadata (PyGWater.egg-info) and build files go to installation/, not the top level
 [tool.distutils.egg_info]
 egg_base = "installation"
+
+[tool.distutils.build]
+build_base = "installation/build"

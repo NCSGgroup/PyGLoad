@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 
 
-from pygwater.config import FileTool
+from PyGWater.config import FileTool
 INPUT = str(FileTool.get_input_dir()) + '/'     # <data root>/input/  (data root: installation/pygwater_paths.cfg)
 CACHE = str(FileTool.get_cache_dir()) + '/'     # <data root>/cache/
 OUTPUT = str(FileTool.get_output_dir()) + '/'   # <data root>/output/
@@ -13,13 +13,13 @@ TEMP = str(FileTool.get_temp_dir()) + '/'   # <data root>/temp/
 import pygmt
 import numpy as np
 
-from pygwater.utils.enums import Displacement
-from pygwater.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
-from pygwater.basis.green.disk_load import DiskLoad, EarthConstant
-from pygwater.forward.disk import GFA_displacement, grid2radius, GFA_regular_grid
+from PyGWater.utils.enums import Displacement
+from PyGWater.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
+from PyGWater.basis.green.disk_load import DiskLoad, EarthConstant
+from PyGWater.forward.disk import GFA_displacement, grid2radius, GFA_regular_grid
 import netCDF4 as nc
 from pathlib import Path
-from pygwater.utils.geomath import GeoMathKit
+from PyGWater.utils.geomath import GeoMathKit
 
 
 def demo1_mascon():
@@ -219,7 +219,7 @@ def demo2_plot():
 
 
 def demo3_SH():
-    from pygwater.basis.spherical_harmonic.data_class import GRID, Enums
+    from PyGWater.basis.spherical_harmonic.data_class import GRID, Enums
 
     ''''''
     filename = 'CSR_GRACE_GRACE-FO_RL0603_Mascons_all-corrections.nc'
@@ -253,7 +253,7 @@ def demo3_SH():
 def compare_SH_Green():
     """Needs temp/sh.npy and temp/100_dis.npy: SH and D-LGF results for 181 monthly epochs, which no script in this
     repository writes (demo3_SH and demo2_Green write single-epoch sh2.npy and 100_dis2.npy). Kept for reference."""
-    from pygwater.basis.spherical_harmonic.data_class import GRID, Enums
+    from PyGWater.basis.spherical_harmonic.data_class import GRID, Enums
     for f in ('sh.npy', '100_dis.npy'):
         if not (FileTool.get_temp_dir(f)).exists():
             raise FileNotFoundError('compare_SH_Green needs %s (181 monthly epochs), not produced by this repository'
@@ -436,7 +436,7 @@ def compare_yang_shen():
 
 
 def cal_SH_loss():
-    from pygwater.basis.spherical_harmonic.data_class import GRID, Enums
+    from PyGWater.basis.spherical_harmonic.data_class import GRID, Enums
     shen = np.loadtxt(INPUT + 'reference/loadvcd.txt', skiprows=1, usecols=2)
     # shen = np.load(TEMP + '100_dis2.npy') * 1000
 

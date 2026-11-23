@@ -1,14 +1,14 @@
 """
 Slepian basis demo (Sect. 8 of Yang et al., 2025): concentration spectrum (cf. Fig. 13) and truncation
 (approximation) error of the Slepian forward model against spherical harmonics (cf. Fig. 14), for a regional mask
-produced by pygwater.mesh.shape_mask.basinMask. Run from any folder:  python examples/slepian_truncation.py
+produced by PyGWater.mesh.shape_mask.basinMask. Run from any folder:  python examples/slepian_truncation.py
 """
 import os
 import sys
 from pathlib import Path
 
 
-from pygwater.config import FileTool
+from PyGWater.config import FileTool
 INPUT = str(FileTool.get_input_dir()) + '/'     # <data root>/input/  (data root: installation/pygwater_paths.cfg)
 CACHE = str(FileTool.get_cache_dir()) + '/'     # <data root>/cache/
 OUTPUT = str(FileTool.get_output_dir()) + '/'   # <data root>/output/
@@ -16,11 +16,11 @@ TEMP = str(FileTool.get_temp_dir()) + '/'   # <data root>/temp/
 import h5py
 import numpy as np
 
-import pygwater.utils.enums as Enums
-from pygwater.utils.geomath import GeoMathKit
-from pygwater.earth.love_numbers import LoveNumber
-from pygwater.basis.slepian import SlepianBasis
-from pygwater.basis.spherical_harmonic.data_class import GRID
+import PyGWater.utils.enums as Enums
+from PyGWater.utils.geomath import GeoMathKit
+from PyGWater.earth.love_numbers import LoveNumber
+from PyGWater.basis.slepian import SlepianBasis
+from PyGWater.basis.spherical_harmonic.data_class import GRID
 
 
 def demo_region(mask_file=FileTool.get_cache_dir('mask/EU_res_0.5_crop.h5'),

@@ -13,12 +13,12 @@ import time
 
 import numpy as np
 
-import pygwater as pgw
-from pygwater.config import FileTool
-from pygwater.preprocessing import GNSSNetwork, GNSSDataset, read_ngl_steps, ngl
-from pygwater.inversion.workflow import MonthlyInversion
-from pygwater.observations.grace import Mascon, compare, remove_far_field, cm_to_cf
-from pygwater.mesh.land import land_fraction
+import PyGWater as pgw
+from PyGWater.config import FileTool
+from PyGWater.preprocessing import GNSSNetwork, GNSSDataset, read_ngl_steps, ngl
+from PyGWater.inversion.workflow import MonthlyInversion
+from PyGWater.observations.grace import Mascon, compare, remove_far_field, cm_to_cf
+from PyGWater.mesh.land import land_fraction
 
 from config import CONFIG as C
 

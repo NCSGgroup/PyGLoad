@@ -2,9 +2,9 @@
 import numpy as np
 import pytest
 
-from pygwater.preprocessing import GNSSNetwork, GNSSDataset, read_tenv3, read_ngl_steps
-from pygwater.preprocessing import ngl
-from pygwater.preprocessing.trajectory import clean_segments
+from PyGWater.preprocessing import GNSSNetwork, GNSSDataset, read_tenv3, read_ngl_steps
+from PyGWater.preprocessing import ngl
+from PyGWater.preprocessing.trajectory import clean_segments
 
 MON = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
 
@@ -155,7 +155,7 @@ def test_ngl_cmcf_and_combined_corrections(tmp_path):
 
 
 def test_select_reference_ring_keeps_one_far_station_per_cell():
-    from pygwater.preprocessing.ngl import StationInfo, select_reference_ring
+    from PyGWater.preprocessing.ngl import StationInfo, select_reference_ring
     st = [StationInfo('NEAR', 30.0, -95.0, 0, '2010-01-01', '2020-01-01', 3000),
           StationInfo('FARA', 30.2, -104.3, 0, '2010-01-01', '2020-01-01', 3000),    # ~900 km west
           StationInfo('FARB', 30.4, -104.6, 0, '2010-01-01', '2020-01-01', 3500),    # same 1-deg cell, more data
@@ -166,7 +166,7 @@ def test_select_reference_ring_keeps_one_far_station_per_cell():
 
 def test_dataset_select():
     import numpy as np
-    from pygwater.preprocessing import GNSSDataset
+    from PyGWater.preprocessing import GNSSDataset
     ds = GNSSDataset(['A', 'B', 'C'], np.array([30., 35., 40.]), np.array([-95., -95., -95.]), ['2017-08-01'],
                      {'U': np.array([[1., 2., 3.]])}, {'U': np.ones((1, 3))}, ('U',), ('2017-08-01', '2017-08-01'))
     out = ds.select(box=(29, 36, -96, -94))

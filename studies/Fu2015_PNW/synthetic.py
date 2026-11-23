@@ -36,13 +36,13 @@ from pathlib import Path
 
 import numpy as np
 
-from pygwater.config import FileTool
-from pygwater.utils.enums import LLN_Data, Displacement
-from pygwater.earth.love_numbers import LoveNumber
-from pygwater.basis.green.gf_basis import GreenFunctionBasis
-from pygwater.inversion.solver import RegularizedLeastSquares
-from pygwater.inversion.regularization import curvature
-from pygwater.observations.synthetic import add_noise
+from PyGWater.config import FileTool
+from PyGWater.utils.enums import LLN_Data, Displacement
+from PyGWater.earth.love_numbers import LoveNumber
+from PyGWater.basis.green.gf_basis import GreenFunctionBasis
+from PyGWater.inversion.solver import RegularizedLeastSquares
+from PyGWater.inversion.regularization import curvature
+from PyGWater.observations.synthetic import add_noise
 
 RES = 0.25
 DOMAIN = (39.5, 51.5, -126.0, -114.5)            # lat_min, lat_max, lon_min, lon_max (west edge: land/coast)

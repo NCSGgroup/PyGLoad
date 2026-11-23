@@ -11,7 +11,7 @@ dependencies:
   - netcdf4>=1.6
   # caps the BLAS threads of the inversion (many threads make it much slower)
   - threadpoolctl>=3
-  # regional masks (pygwater.mesh)
+  # regional masks (PyGWater.mesh)
   - geopandas>=0.13
   - shapely>=2.0
   # tests

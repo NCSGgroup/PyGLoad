@@ -98,7 +98,7 @@ class Harmonic:
                               Exact for band-limited fields if lmax <= nlat/2 - 1 (sampling theorem); beyond
                               that (e.g. lmax = 90 on a 2-degree grid, as Eq. 6 of Yang et al. 2025 suggests)
                               no latitude quadrature on this grid is exact and a warning is issued.
-            'midpoint'      : (alias 'quadrature') the original PyGWater scheme used for the figures of
+            'midpoint'      : (alias 'quadrature') the original PyGLoad scheme used for the figures of
                               Yang et al. (2025): two-step quadrature of Sneeuw (1994), Eqs. 3-5.
                               Grid values are treated as block means. The latitude integral uses the midpoint
                               rule, which is NOT exactly orthogonal on an equi-angular grid: for a band-limited

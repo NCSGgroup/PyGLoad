@@ -1,4 +1,4 @@
-name: pygwater
+name: pygload
 channels:
   - conda-forge
   - nodefaults
@@ -11,7 +11,7 @@ dependencies:
   - netcdf4>=1.6
   # caps the BLAS threads of the inversion (many threads make it much slower)
   - threadpoolctl>=3
-  # regional masks (PyGWater.mesh)
+  # regional masks (src.mesh)
   - geopandas>=0.13
   - shapely>=2.0
   # tests

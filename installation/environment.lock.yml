@@ -1,4 +1,4 @@
-name: pygwater
+name: pygload
 channels:
   - conda-forge
 dependencies:

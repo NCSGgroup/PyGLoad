@@ -1,8 +1,8 @@
-# PyGWater
+# PyGLoad
 
-**Surface loading and GNSS inversion of terrestrial water storage, with a choice of basis functions.**
+**PyGLoad — a Python toolbox for GNSS loading: elastic deformation from surface loads (forward modelling) and the inversion of GNSS displacements for terrestrial water storage, with a choice of basis functions.**
 
-PyGWater computes how the solid Earth deforms under surface water loads and inverts GNSS displacements for the water
+PyGLoad computes how the solid Earth deforms under surface water loads and inverts GNSS displacements for the water
 storage that caused them. Spherical harmonics, point-mass and disk-load Green's functions (D-LGF, CD-LGF) and Slepian
 functions share one interface, so every computation can be repeated with another basis (Yang et al., 2025).
 
@@ -18,9 +18,9 @@ functions share one interface, so every computation can be repeated with another
 ## Getting started
 
 ```bash
-git clone https://github.com/NCSGgroup/PyGWater.git && cd PyGWater
-bash installation/setup_env.sh install --data-root /path/to/PyGWater_external_data
-conda activate pygwater
+git clone https://github.com/NCSGgroup/PyGLoad.git && cd PyGLoad
+bash installation/setup_env.sh install --data-root /path/to/PyGLoad_external_data
+conda activate pygload
 ```
 
 The script creates the Python environment, registers a data folder outside the code and checks the setup; the code
@@ -42,7 +42,7 @@ Step-by-step instructions are in the [installation guide](doc/installation.md).
 
 | Folder | Content |
 |---|---|
-| [src/](src) | the core code, imported as `PyGWater` |
+| [src/](src) | the core code, imported as `PyGLoad` |
 | [examples/](examples) | short demonstrations |
 | [studies/](studies) | complete, reproducible studies |
 | [tests/](tests) | automated tests |
@@ -60,7 +60,7 @@ Data never live in the code folder: inputs, caches and results all go to the dat
 When you use GNSS series from the Nevada Geodetic Laboratory, please also cite Blewitt, Hammond & Kreemer (2018),
 *Eos*, 99. See [CITATION.cff](CITATION.cff).
 
-PyGWater belongs to the GravityPython toolboxes, with [PyHawk](https://github.com/NCSGgroup/PyHawk),
+PyGLoad belongs to the GravityPython toolboxes, with [PyHawk](https://github.com/NCSGgroup/PyHawk),
 [SaGEA](https://github.com/NCSGgroup/SaGEA), [PyGLDA](https://github.com/AAUGeodesyGroup/PyGLDA) and
 [SAGEA-fluid](https://github.com/NCSGgroup/SAGEA-fluid).
 

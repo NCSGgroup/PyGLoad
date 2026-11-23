@@ -7,7 +7,7 @@ class FileTool:
     @staticmethod
     def get_project_dir(sub=None, *, relative=False):
         """
-        Root directory of the PyGWater repository (the folder that contains src/, examples/, studies/, installation/).
+        Root directory of the PyGLoad repository (the folder that contains src/, examples/, studies/, installation/).
         Resolved from the location of this file, so it no longer depends on the current working directory.
         """
         dir_of_project = Path(__file__).resolve().parents[1]
@@ -23,15 +23,15 @@ class FileTool:
 
         return result
 
-    CONFIG_FILE = 'installation/pygwater_paths.cfg'
+    CONFIG_FILE = 'installation/pygload_paths.cfg'
 
     @staticmethod
     def _setting(key, env):
         """
         The data-root setting, in order of precedence:
           1. environment variable <env>
-          2. '<key> = <path>' in <project>/installation/pygwater_paths.cfg (local, not in git; template:
-             installation/pygwater_paths.cfg.example)
+          2. '<key> = <path>' in <project>/installation/pygload_paths.cfg (local, not in git; template:
+             installation/pygload_paths.cfg.example)
         :return: Path or None
         """
         import os
@@ -51,21 +51,21 @@ class FileTool:
     @staticmethod
     def get_data_dir(sub=None):
         """
-        External data root, kept outside the code (cf. PyGLDA_v2_external_data). ALL data PyGWater reads or writes
+        External data root, kept outside the code (cf. PyGLDA_v2_external_data). ALL data PyGLoad reads or writes
         live under it; nothing is written inside the code folder. Set it with 'data_root = ...' in
-        installation/pygwater_paths.cfg or the environment variable PYGWATER_DATA (which takes precedence). It must
+        installation/pygload_paths.cfg or the environment variable PYGLOAD_DATA (which takes precedence). It must
         lie outside the code folder; without a setting an error is raised (there is no default inside the code).
         Layout, by role:
-            input/    external sources, only read by PyGWater: LLN/, land_mask/, mascon/, shp/, stations/, reference/
-            cache/    built by PyGWater, regenerable and reused: LGD_template*/, mask/, shp/ (generated grids)
+            input/    external sources, only read by PyGLoad: LLN/, land_mask/, mascon/, shp/, stations/, reference/
+            cache/    built by PyGLoad, regenerable and reused: LGD_template*/, mask/, shp/ (generated grids)
             output/   results, one folder per study (paper_JGR2025/, inversion_China/, ...)
             temp/     scratch, safe to delete
         """
-        result = FileTool._setting('data_root', 'PYGWATER_DATA')
+        result = FileTool._setting('data_root', 'PYGLOAD_DATA')
         if result is None:
             raise FileNotFoundError(
-                "PyGWater data root not set. Code and data are kept apart: set 'data_root = <path>' in %s "
-                "(copy installation/pygwater_paths.cfg.example) or the environment variable PYGWATER_DATA."
+                "PyGLoad data root not set. Code and data are kept apart: set 'data_root = <path>' in %s "
+                "(copy installation/pygload_paths.cfg.example) or the environment variable PYGLOAD_DATA."
                 % FileTool.get_project_dir(FileTool.CONFIG_FILE))
         if FileTool.get_project_dir() in [result, *result.parents]:
             raise ValueError('The data root %s lies inside the code folder %s; put it outside.'
@@ -92,7 +92,7 @@ class FileTool:
 
     @staticmethod
     def get_cache_dir(sub=None):
-        """built by PyGWater, regenerable and reused: <data root>/cache (LGD_template*/, mask/, shp/)"""
+        """built by PyGLoad, regenerable and reused: <data root>/cache (LGD_template*/, mask/, shp/)"""
         return FileTool._under('cache', sub)
 
     @staticmethod

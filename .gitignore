@@ -25,7 +25,7 @@ Thumbs.db
 
 # Project-specific: no data in the code folder; all data live under the data root (doc/installation.md).
 # Only the local setting of that root is kept here, untracked.
-installation/pygwater_paths.cfg
+installation/pygload_paths.cfg
 
 # Personal and local, not published: two working studies, the Cowork <-> Claude Code note, files sent by Claude
 studies/JGR2025_basis_functions/

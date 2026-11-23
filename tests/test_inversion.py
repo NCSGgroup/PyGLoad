@@ -58,7 +58,7 @@ def test_choose_alpha_rejects_time_series():
 
 
 def test_inversion_warns_when_the_basis_is_finer_than_the_network():
-    """a misconfigured spectral basis fits the data as well as a correct one, so PyGWater warns instead"""
+    """a misconfigured spectral basis fits the data as well as a correct one, so PyGLoad warns instead"""
     import warnings
     from src.inversion.workflow import MonthlyInversion
     from src.preprocessing import GNSSDataset

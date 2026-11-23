@@ -33,7 +33,7 @@ class MonthlyInversion:
     def __init__(self, basis, lln, dataset, components=None, R=None, weights='station', sigma_floor=1e-4,
                  cache_gb=1.0, threads=1, common_mode=()):
         """
-        :param basis: any PyGWater Basis (GreenFunctionBasis, SphericalHarmonicBasis, SlepianBasis)
+        :param basis: any PyGLoad Basis (GreenFunctionBasis, SphericalHarmonicBasis, SlepianBasis)
         :param lln: LoveNumber object (choose the frame consistent with the GNSS series, e.g. CF for seasonal loads)
         :param dataset: GNSSDataset (src.preprocessing)
         :param components: subset of dataset.components, e.g. ('U',) or ('U', 'N', 'E')

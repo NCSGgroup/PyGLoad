@@ -41,7 +41,7 @@ at arbitrary points (e.g. GNSS stations) are  u = A x  with
 
         A = Y(points) @ diag(3 rho_w / rho_e * h_n / (2n+1)) @ G[:, :Lc]
 
-see SlepianBasis.design_matrix(). This is the regional inversion operator used later by PyGWater.
+see SlepianBasis.design_matrix(). This is the regional inversion operator used later by PyGLoad.
 
 Coefficient ordering
 --------------------

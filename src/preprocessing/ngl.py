@@ -28,7 +28,7 @@ HOLDINGS_URL = BASE + '/NGLStationPages/DataHoldings.txt'
 STEPS_URL = BASE + '/NGLStationPages/steps.txt'
 LOAD_URL = BASE + '/gps_timeseries/tenv3_loadpredictions/{site}.tenv3'
 # CM -> CF translation per station (Altamimi et al. 2023 geocentre motion): NGL series are in CM (IGS20); subtracting
-# these values places them in CF, the frame of PyGWater's Love numbers for regional loading (README_loadpred.txt).
+# these values places them in CF, the frame of PyGLoad's Love numbers for regional loading (README_loadpred.txt).
 # File: lowercase station id, no extension; rows: station YYMMMDD decimal_year east north up [m]
 CMCF_URL = BASE + '/gps_timeseries/loadpredictions/cmcf/{site_lower}'
 # load predictions appended to the .tenv3 columns: east, north, up [m] of each model, ESMGFZ (atmosphere NTAL, non-tidal
@@ -124,7 +124,7 @@ def select_reference_ring(stations, center, min_km, max_km, start=None, end=None
 
 
 def _fetch(url, path, timeout=60, check=None):
-    req = urllib.request.Request(url, headers={'User-Agent': 'PyGWater'})
+    req = urllib.request.Request(url, headers={'User-Agent': 'PyGLoad'})
     with urllib.request.urlopen(req, timeout=timeout) as r:
         data = r.read()
     if data[:2] == b'\x1f\x8b':                       # gzip-compressed

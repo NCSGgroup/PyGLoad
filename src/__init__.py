@@ -1,5 +1,5 @@
 """
-PyGWater: elastic loading deformation of the Earth (GNSS displacement, geoid, gravity) from surface water loads,
+PyGLoad: elastic loading deformation of the Earth (GNSS displacement, geoid, gravity) from surface water loads,
 and the inversion of GNSS observations for those loads, with a choice of basis functions (Yang et al., 2025).
 
 The code lives in the folder src/ of the repository and is imported from the repository folder, as in PyGLDA v2:

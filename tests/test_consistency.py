@@ -1,5 +1,5 @@
 """
-Consistency tests for PyGWater (run from the project root:  python -m pytest tests -q).
+Consistency tests for PyGLoad (run from the project root:  python -m pytest tests -q).
 They need <data root>/input/LLN/PREM-LLNs-complete.dat.
 """
 import warnings

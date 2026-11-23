@@ -1,6 +1,6 @@
-# PyGWater — user guide
+# PyGLoad — user guide
 
-> **PyGWater**: a multi-basis toolbox for modelling the elastic response of the Earth to surface loading
+> **PyGLoad**: a multi-basis toolbox for modelling the elastic response of the Earth to surface loading
 > (displacement, geoid, gravity, InSAR line of sight) and for estimating terrestrial water storage from geodetic
 > deformation.
 > Status: development version (not yet released).
@@ -38,7 +38,7 @@
 
 ## 1. Concept
 
-Every quantity in PyGWater is a linear response of a spherically symmetric, non-rotating, elastic, isotropic
+Every quantity in PyGLoad is a linear response of a spherically symmetric, non-rotating, elastic, isotropic
 (SNREI) Earth to a thin surface load, described by the load Love numbers h_n, l_n, k_n. With the load given as
 equivalent water height (EWH) E and F_n = 3 rho_w / (rho_e (2n+1)), the response is, degree by degree,
 
@@ -54,7 +54,7 @@ equivalent water height (EWH) E and F_n = 3 rho_w / (rho_e (2n+1)), the response
 
 The same physics can be represented with different **basis functions**: spherical harmonics, Green's functions
 (point mass, disk, clustered disks) and Slepian functions. Yang et al. (2025) show that the choice and configuration
-of the basis can cause errors as large as those from the assumed Earth structure. PyGWater implements these bases
+of the basis can cause errors as large as those from the assumed Earth structure. PyGLoad implements these bases
 with **identical constants and Love numbers**, so they can be compared and swapped.
 
 ```
@@ -78,7 +78,7 @@ with **identical constants and Love numbers**, so they can be compared and swapp
 ## 2. Installation and data
 
 See [installation.md](installation.md) for the environment, the external data (Love numbers in `<data root>/input/LLN/`,
-data root set in `installation/pygwater_paths.cfg` or by `PYGWATER_DATA`) and how to run the code.
+data root set in `installation/pygload_paths.cfg` or by `PYGLOAD_DATA`) and how to run the code.
 
 As in PyGLDA v2, the library (folder `src/`) is imported from the repository folder: scripts put that folder on the
 path (`sys.path.insert(0, <repository>)`, see `examples/`), then import `src`. The main classes are available at
@@ -447,7 +447,7 @@ Following Yang et al. (2025), first decide what a grid value represents:
 | Grid value represents | Typical data | Recommended basis | Configuration |
 |---|---|---|---|
 | I. block mean | reanalysis, hydrological models | spherical harmonics (global); finite LGF (regional) | Nmax = 180/res |
-| II. point value | in-situ gauges | infinite LGF (not implemented in PyGWater) | |
+| II. point value | in-situ gauges | infinite LGF (not implemented in PyGLoad) | |
 | III. uniform value per cell (mascon) | GRACE mascons, constrained GNSS inversion | CD-LGF (sub-grid 0.1-0.2 deg); D-LGF only for cells <= ~0.1 deg | N >= max(720/radius, 10 000) |
 
 Slepian functions are a regional alternative to spherical harmonics; their truncation (Lc) adds an approximation

@@ -1,5 +1,5 @@
 """
-Common interface of all basis functions in PyGWater.
+Common interface of all basis functions in PyGLoad.
 
 Every basis is a LINEAR PARAMETERISATION of the surface load (equivalent water height, EWH [m]),
 

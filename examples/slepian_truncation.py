@@ -10,7 +10,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # repository root, so that `src` is importable
 from src.config import FileTool
-INPUT = str(FileTool.get_input_dir()) + '/'     # <data root>/input/  (data root: installation/pygwater_paths.cfg)
+INPUT = str(FileTool.get_input_dir()) + '/'     # <data root>/input/  (data root: installation/pygload_paths.cfg)
 CACHE = str(FileTool.get_cache_dir()) + '/'     # <data root>/cache/
 OUTPUT = str(FileTool.get_output_dir()) + '/'   # <data root>/output/
 TEMP = str(FileTool.get_temp_dir()) + '/'   # <data root>/temp/

@@ -1,6 +1,6 @@
 """
 Synthetic checkerboard test of Fu, Argus & Landerer (2015), JGR Solid Earth 120, 552-566, Sect. 4.2 / Fig. 11a-b,
-reproduced with PyGWater, and extended to other bases and to three-component data.
+reproduced with PyGLoad, and extended to other bases and to three-component data.
 
 Fu et al. (2015) setup (Sects. 2.2, 4.2), followed here:
     domain      : 39.5-51.5 N, Pacific coast to 114.5 W (Washington and Oregon + 2.5 deg buffer), land only

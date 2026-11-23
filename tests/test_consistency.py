@@ -196,6 +196,23 @@ def test_gravity_kernel_vs_wang2012_table():
     assert np.all(np.abs(ratio - 1) < 2e-3)
 
 
+def test_vertical_kernel_without_degree0_vs_wang2012_table():
+    """LGF_Kummer.getVertical_exclude_d0 reproduces the vertical column (ur2) of Wang et al. (2012) PREM-LGFs.dat,
+    which excludes degree 0; the full kernel differs from it by h_0 a/M, i.e. by up to about 2.8 units at 180 deg."""
+    from pygwater.config import FileTool
+    f = FileTool.get_input_dir('LLN/PREM-LGFs.dat')
+    if not f.exists():
+        pytest.skip('PREM-LGFs.dat not available')
+    T = np.loadtxt(f, skiprows=1)
+    th = T[:, 0]
+    lln = LoveNumber().config(lmax=40000, method=LLN_Data.PREM).get_Love_number()
+    K = LGF_Kummer(lln).configure(th)
+    scale = 1e12 * EarthConstant.radiusm * np.deg2rad(th)
+    u0 = K.getVertical_exclude_d0() * scale
+    assert np.max(np.abs(u0 - T[:, 1])) < 0.1
+    assert np.max(np.abs(K.getVertical() * scale - T[:, 1])) > 1.0  # degree 0 matters far from the load
+
+
 def test_observables_sh_slepian_gravity_and_los():
     from pygwater.utils.enums import Displacement
     from pygwater.earth import observables as Observables

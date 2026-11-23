@@ -80,23 +80,45 @@ class MonthlyInversion:
         self.threads = threads
 
     def _check_resolution(self):
-        """warn when a spectral basis (spherical harmonics, Slepian) resolves finer than the network: L > 180/s for a
-        median station spacing s [deg] (Yang et al., 2025); the data fit does not reveal this misconfiguration"""
-        lmax = getattr(self.basis, 'lmax', None)
-        lat, lon = np.radians(self.ds.lat), np.radians(self.ds.lon)
-        if lmax is None or lat.size < 2:
+        """
+        Warn when the basis resolves finer than the station network (the data fit does not reveal this; Yang et al.,
+        2025). The network is described by its coverage: d = distance from each point of a 0.1-deg grid over the
+        stations' bounding box to the nearest station, and the spacing s = 2.5 median(d) [deg] (exact for a square grid of
+        stations; robust to clustering,
+        unlike the nearest-neighbour distance between stations).
+          spectral bases (spherical harmonics, Slepian): warn if L > 180/s
+          Green's-function cells: warn if more than 25% of the network area lies farther than one cell size from any
+          station (cells there are constrained by regularisation only)
+        """
+        lat, lon = np.asarray(self.ds.lat, float), np.asarray(self.ds.lon, float)
+        if lat.size < 2:
             return
-        c = np.clip(np.sin(lat)[:, None] * np.sin(lat)[None, :] + np.cos(lat)[:, None] * np.cos(lat)[None, :]
-                    * np.cos(lon[:, None] - lon[None, :]), -1, 1)
-        d = np.degrees(np.arccos(c))
-        np.fill_diagonal(d, np.inf)
-        s = float(np.median(d.min(axis=1)))
+        g1 = np.arange(lat.min(), lat.max() + 1e-9, 0.1)
+        g2 = np.arange(lon.min(), lon.max() + 1e-9, 0.1)
+        G2, G1 = np.meshgrid(g2, g1)
+        p, q = np.radians(G1.ravel()), np.radians(G2.ravel())
+        x, y = np.radians(lat), np.radians(lon)
+        d = np.full(p.size, np.inf)
+        for b in range(0, p.size, 20000):                       # blocks keep memory small for large networks
+            c = (np.sin(p[b:b + 20000])[:, None] * np.sin(x)[None, :] + np.cos(p[b:b + 20000])[:, None]
+                 * np.cos(x)[None, :] * np.cos(y[None, :] - q[b:b + 20000][:, None]))
+            d[b:b + 20000] = np.degrees(np.arccos(np.clip(c.max(axis=1), -1, 1)))
+        s = 2.5 * float(np.median(d))
         self.station_spacing = s
-        if s > 0 and lmax > 180.0 / s:
-            import warnings
-            warnings.warn('basis degree L=%d exceeds 180/s = %d for the median station spacing s = %.2f deg: the '
-                          'network cannot resolve it, and the result can show artefacts with an equally good data fit '
+        import warnings
+        lmax = getattr(self.basis, 'lmax', None)
+        if lmax is not None and s > 0 and lmax > 180.0 / s:
+            warnings.warn('basis degree L=%d exceeds 180/s = %d for the station spacing s = %.2f deg: the network '
+                          'cannot resolve it, and the result can show artefacts with an equally good data fit '
                           '(Yang et al., 2025)' % (lmax, int(180.0 / s), s))
+        res = getattr(self.basis, 'resolution', None)
+        if lmax is None and res:
+            frac = float(np.mean(d > res))
+            self.uncovered_fraction = frac
+            if frac > 0.25:
+                warnings.warn('%.0f%% of the network area lies farther than one cell (%.2f deg) from any station: '
+                              'cells there are constrained only by regularisation; consider larger cells (station '
+                              'spacing s = %.2f deg)' % (100 * frac, res, s))
 
     def _limit(self):
         if self.threads is None or threadpool_limits is None:

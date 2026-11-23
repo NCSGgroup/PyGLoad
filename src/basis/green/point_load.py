@@ -142,17 +142,13 @@ class LGF_Kummer(LGF_truncation):
 
     def getVertical_exclude_d0(self):
         """
-        Exclude degree-0
-        :return:
+        Vertical kernel without the degree-0 term h_0 P_0 = h_0, as tabulated by Wang et al. (2012, PREM-LGFs.dat).
+        The Kummer form sum_{n>=1} (h_n - h_inf) P_n + h_inf (1 / (2 sin(theta/2)) - 1) would need the sum to start
+        at n = 1; it is simpler and exact to remove h_0 from the full kernel. (The previous version summed from
+        n = 0 and subtracted h_inf instead of h_0, i.e. it was off by the constant h_inf - h_0, about -6.1 for PREM.)
         """
-        h_inf = self._lln.LLN[LLN_variable.h][-1]
-
-        sinTheta2 = np.sin(np.deg2rad(self._residence / 2))
-
-        item = self._Pl * (self._lln.LLN[LLN_variable.h] - h_inf)
-
-        return self._out((np.sum(item, axis=-1) + h_inf * (1 / (2 * sinTheta2) - 1))
-                         * EarthConstant.radiusm / EarthConstant.Mass)
+        h0 = self._lln.LLN[LLN_variable.h][0]
+        return self._out(np.atleast_1d(self.getVertical()) - h0 * EarthConstant.radiusm / EarthConstant.Mass)
 
     def getGravity(self, newtonian='below', include_degree0=True):
         """

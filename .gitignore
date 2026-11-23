@@ -27,6 +27,12 @@ Thumbs.db
 # Only the local setting of that root is kept here, untracked.
 installation/pygwater_paths.cfg
 
+# Personal and local, not published: two working studies, the Cowork <-> Claude Code note, files sent by Claude
+studies/JGR2025_basis_functions/
+studies/GNSS_TWS_validation/
+doc/cowork_sync.md
+Claude outputs/
+
 # Large data files
 *.nc
 *.h5

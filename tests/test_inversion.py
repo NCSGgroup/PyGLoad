@@ -82,7 +82,34 @@ def test_inversion_warns_when_the_basis_is_finer_than_the_network():
         assert not [x for x in w if 'station spacing' in str(x.message)]
         inv = MonthlyInversion(Basis(480), None, ds)                            # beyond what 1-degree spacing resolves
         assert [x for x in w if 'station spacing' in str(x.message)]
-    assert abs(inv.station_spacing - 0.75) < 0.1                                # 1 deg of longitude at ~42 N
+    assert 0.75 < inv.station_spacing < 1.15                                     # coverage spacing of a 1-degree grid
+
+
+def test_inversion_warns_when_green_function_cells_are_finer_than_the_network():
+    import warnings
+    from pygwater.inversion.workflow import MonthlyInversion
+    from pygwater.preprocessing import GNSSDataset
+
+    class Cells:                               # stands for a Green's-function basis of a given cell size
+        n_param = 4
+
+        def __init__(self, resolution):
+            self.resolution = resolution
+
+        def design_matrix(self, lat, lon, lln, obs):
+            return np.ones((len(lat), self.n_param))
+
+    lat, lon = np.meshgrid(np.arange(40, 46, 1.0), np.arange(-120, -114, 1.0))      # 1-degree spacing
+    n = lat.size
+    ds = GNSSDataset(list(map(str, range(n))), lat.ravel(), lon.ravel(), ['2020-01'], {'U': np.zeros((1, n))},
+                     {'U': np.full((1, n), 1e-3)}, ('U',), ('2020-01', '2020-01'))
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter('always')
+        MonthlyInversion(Cells(1.0), None, ds)                                  # cells as large as the spacing
+        assert not [x for x in w if 'farther than one cell' in str(x.message)]
+        inv = MonthlyInversion(Cells(0.1), None, ds)                            # far finer than the network
+        assert [x for x in w if 'farther than one cell' in str(x.message)]
+    assert inv.uncovered_fraction > 0.9
 
 
 def test_running_mean_of_an_inversion_result():

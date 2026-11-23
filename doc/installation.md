@@ -128,4 +128,31 @@ not tracked by git. If an older install left `pygwater.egg-info` at the top leve
 (The tests also run from a plain checkout without installation.) In PyCharm, select the `pygwater` interpreter after
 the install; no source-root marking is needed.
 
+### What the installed package contains
+
+Studies, examples, tests, documentation and installation files are part of PyGWater, not extras: everything
+published on GitHub is released as one package. Without moving any folder, `pyproject.toml` installs
+
+| folder | installed as | content |
+|---|---|---|
+| `src/` | `pygwater` | the library |
+| `studies/` | `pygwater.studies` | reproducible studies: `GNSS_GRACE/`, `Fu2015_PNW/`, `China/` |
+| `examples/` | `pygwater.examples` | one script per feature |
+| `tests/` | `pygwater.tests` | the test suite |
+| `doc/` | `pygwater.doc` | installation and user guides |
+| `installation/` | `pygwater.installation` | `environment.yml`, `requirements.txt`, `pygwater_paths.cfg.example` |
+
+so that `pip install pygwater` (or the wheel of a release) gives users everything. Notes:
+
+- Studies and examples are **scripts**: run them with `python <file>`, not imported. Several studies import their
+  sibling files (`from config import CONFIG`), which works because Python puts the script's folder first on the path.
+- In a regular (non-editable) install they sit in `site-packages/pygwater/studies/...` and `.../examples/`; find them with
+  `python -c "import pygwater.studies as s; print(s.__path__[0])"`. Copy a study elsewhere before editing it;
+  its outputs go where its config points (the external data folder), never into `site-packages`.
+- In the editable install (`pip install -e .`) only `import pygwater` is mapped (a setuptools limitation for
+  sub-packages in other folders); run studies, examples and tests from the repository as above.
+- The installed package is larger by about 0.5 MB of scripts and text; data are never packaged.
+- Not published (git-ignored, excluded from the package): `studies/JGR2025_basis_functions/`,
+  `studies/GNSS_TWS_validation/`, `doc/cowork_sync.md`, `Claude outputs/`, `installation/pygwater_paths.cfg`.
+
 See [user_guide.md](user_guide.md) for all options and usage.

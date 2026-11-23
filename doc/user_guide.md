@@ -98,7 +98,7 @@ the top level (`import pygwater as pgw`: `pgw.LoveNumber`, `pgw.GreenFunctionBas
 | `pygwater.utils` | `constants.py`, `enums.py`, `geomath.py`, `mathtool.py` |
 
 Scripts outside the library: `examples/` (one feature each) and `studies/` (reproducible studies, e.g.
-`studies/JGR2025_basis_functions/figures.py` for the figures of Yang et al., 2025).
+`studies/GNSS_GRACE/` for GNSS-derived water storage compared with GRACE).
 
 ---
 
@@ -601,7 +601,7 @@ python studies/China/inversion.py           # closed-loop and checkerboard inver
 functions retained) against SH, the Green's-function basis against the grid convolutions of `pygwater.forward`, agreement
 of SH and point-mass forward models, LOS and load synthesis. `tests/test_consistency.py` checks the constants, Love-number frames, kernel shapes, north/east projection, the
 spherical-harmonic schemes, Slepian equivalence for every observable, the gravity kernel against Wang et al. (2012)
-and the above/below gravity relation. `studies/JGR2025_basis_functions/figures.py` reproduces the figures of Yang et al. (2025).
+and the above/below gravity relation.
 
 ---
 

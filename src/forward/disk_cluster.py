@@ -1,11 +1,11 @@
 import numpy as np
-from PyGWater.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
-from PyGWater.basis.green.disk_load import DiskLoad
-from PyGWater.utils.enums import Displacement
-from PyGWater.utils.geomath import GeoMathKit
-from PyGWater.mesh.regular_grid import regular
+from src.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
+from src.basis.green.disk_load import DiskLoad
+from src.utils.enums import Displacement
+from src.utils.geomath import GeoMathKit
+from src.mesh.regular_grid import regular
 from pathlib import Path
-from PyGWater.config import FileTool
+from src.config import FileTool
 
 
 def template_name(postfix, variable=Displacement.Vertical):

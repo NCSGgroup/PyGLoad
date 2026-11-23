@@ -40,8 +40,8 @@ vector (positive = motion towards the satellite).
 
 import numpy as np
 
-from PyGWater.utils.constants import EarthConstant
-from PyGWater.utils.enums import Displacement, LLN_variable
+from src.utils.constants import EarthConstant
+from src.utils.enums import Displacement, LLN_variable
 
 '''alias: the enum lists observables, not only displacements'''
 Observable = Displacement
@@ -101,8 +101,8 @@ def sh_synthesis(load_cqlm, load_sqlm, lln, variable: Displacement, lat, lon, **
     :param kwargs: newtonian=..., height=... (see love_factor)
     :return: (nlat, nlon) or (ntime, nlat, nlon)
     """
-    from PyGWater.basis.spherical_harmonic.harmonic import Harmonic
-    from PyGWater.utils.enums import PhysicalDimensions
+    from src.basis.spherical_harmonic.harmonic import Harmonic
+    from src.utils.enums import PhysicalDimensions
 
     load_cqlm, load_sqlm = np.asarray(load_cqlm), np.asarray(load_sqlm)
     L = load_cqlm.shape[-1] - 1

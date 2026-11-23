@@ -3,7 +3,8 @@ import sys
 from pathlib import Path
 
 
-from PyGWater.config import FileTool
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # repository root, so that `src` is importable
+from src.config import FileTool
 INPUT = str(FileTool.get_input_dir()) + '/'     # <data root>/input/  (data root: installation/pygwater_paths.cfg)
 CACHE = str(FileTool.get_cache_dir()) + '/'     # <data root>/cache/
 OUTPUT = str(FileTool.get_output_dir()) + '/'   # <data root>/output/
@@ -11,14 +12,14 @@ TEMP = str(FileTool.get_temp_dir()) + '/'   # <data root>/temp/
 
 
 import numpy as np
-from PyGWater.utils.enums import Displacement
-from PyGWater.forward.point_mass import GFA_displacement, LoveNumber, LLN_Data, Grids_generation, \
+from src.utils.enums import Displacement
+from src.forward.point_mass import GFA_displacement, LoveNumber, LLN_Data, Grids_generation, \
     GFA_regular_grid
 import netCDF4 as nc
 from pathlib import Path
 import pygmt
-from PyGWater.utils.geomath import GeoMathKit
-from PyGWater.utils.constants import EarthConstant
+from src.utils.geomath import GeoMathKit
+from src.utils.constants import EarthConstant
 
 
 def demo_Green_genenral():

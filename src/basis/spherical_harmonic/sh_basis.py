@@ -15,10 +15,10 @@ Use cs2d_to_vec / vec_to_cs2d to convert from/to the (cqlm, sqlm) arrays used by
 
 import numpy as np
 
-from PyGWater.utils.mathtool import MathTool
-from PyGWater.utils.enums import Displacement
-from PyGWater.earth import observables as Observables
-from PyGWater.basis.base import Basis
+from src.utils.mathtool import MathTool
+from src.utils.enums import Displacement
+from src.earth import observables as Observables
+from src.basis.base import Basis
 
 
 class SphericalHarmonicBasis(Basis):
@@ -153,7 +153,7 @@ class SphericalHarmonicBasis(Basis):
 
     def sh_coefficients(self, ewh, lat, lon, method='auto'):
         """SH coefficient vector(s) of a gridded EWH load [m] (analysis as in Harmonic.analysis, SaGEA-style)."""
-        from PyGWater.basis.spherical_harmonic.harmonic import Harmonic
+        from src.basis.spherical_harmonic.harmonic import Harmonic
         ewh = np.asarray(ewh, dtype=float)
         cqlm, sqlm = Harmonic(np.asarray(lat), np.asarray(lon), self.lmax, option=1).analysis(ewh, method=method)
         vec = self.cs2d_to_vec(cqlm, sqlm)

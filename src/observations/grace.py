@@ -1,7 +1,7 @@
 """
 GRACE/GRACE-FO mascon solutions for comparison with GNSS-inverted loads.
 
-    from PyGWater.observations.grace import Mascon, compare
+    from src.observations.grace import Mascon, compare
     g = Mascon.read(path)                                   # CSR RL06.x mascons (NetCDF), JPL in the same layout
     g = g.anomalies(reference=('2004-01', '2009-12'))       # relative to the same period as the GNSS data
     s = g.regional_series(lat, lon, inside)                 # area-weighted mean EWH over a region [m]
@@ -104,8 +104,8 @@ def far_field(mascon, lat, lon, lln, exclude, component='U', resolution=0.5, mon
     :param resolution: cells used for the prediction [deg] (multiple of the mascon grid; 0.5 for 0.25-degree CSR)
     :return: months, (n_month, N) displacement [m]
     """
-    from PyGWater.basis.green.gf_basis import GreenFunctionBasis
-    from PyGWater.utils.enums import Displacement
+    from src.basis.green.gf_basis import GreenFunctionBasis
+    from src.utils.enums import Displacement
     k = int(round(resolution / abs(mascon.lat[1] - mascon.lat[0])))
     nla, nlo = (mascon.lat.size // k) * k, (mascon.lon.size // k) * k
     la = mascon.lat[:nla].reshape(-1, k).mean(1)
@@ -130,7 +130,7 @@ def _harmonics(x):
 
 def _decyear(epochs):
     """'YYYY-MM' or 'YYYY-MM-DD' -> decimal years"""
-    from PyGWater.preprocessing.series import epoch_to_decyear
+    from src.preprocessing.series import epoch_to_decyear
     return np.array([epoch_to_decyear(e) for e in epochs])
 
 
@@ -170,8 +170,8 @@ def geocentre(mascon, lln, resolution=2.0, n_points=400):
              displacement in CF is the projection of T on the direction of that component (unit_vectors)
     """
     import copy
-    from PyGWater.basis.green.gf_basis import GreenFunctionBasis
-    from PyGWater.utils.enums import Displacement, Frame
+    from src.basis.green.gf_basis import GreenFunctionBasis
+    from src.utils.enums import Displacement, Frame
     k = int(round(resolution / abs(mascon.lat[1] - mascon.lat[0])))
     nla, nlo = (mascon.lat.size // k) * k, (mascon.lon.size // k) * k
     if np.ptp(mascon.lat[:nla]) < 170 or np.ptp(mascon.lon[:nlo]) < 350:

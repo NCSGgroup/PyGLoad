@@ -2,13 +2,13 @@
 Land fraction of grid cells from the 0.1-degree land mask (<data root>/input/land_mask/land_mask_res0.1.h5; rows from
 90N to 90S, columns from 180W to 180E; 1 = land).
 
-    from PyGWater.mesh.land import land_fraction
+    from src.mesh.land import land_fraction
     frac = land_fraction(lat1, lon1, 0.5)          # (nlat, nlon) in [0, 1] for a cell-centred grid
     cells = GreenFunctionBasis.from_grid(lat1, lon1, 0.5, mask=frac >= 0.3)
 """
 import numpy as np
 
-from PyGWater.config import FileTool
+from src.config import FileTool
 
 _MASK = None
 

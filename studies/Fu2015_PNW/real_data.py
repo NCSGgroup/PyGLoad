@@ -27,11 +27,12 @@ from pathlib import Path
 
 import numpy as np
 
-from PyGWater.config import FileTool
-from PyGWater.utils.enums import Displacement
-from PyGWater.utils.constants import EarthConstant
-from PyGWater.inversion.solver import RegularizedLeastSquares
-from PyGWater.inversion.regularization import curvature
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repository root, so that `src` is importable
+from src.config import FileTool
+from src.utils.enums import Displacement
+from src.utils.constants import EarthConstant
+from src.inversion.solver import RegularizedLeastSquares
+from src.inversion.regularization import curvature
 from synthetic import setup, make_bases, RES, WA_OR
 
 SIGMA_U = 1.5e-3  # [m] assumed error of a site's mean seasonal uplift (GPS + digitising); Fu et al. quote none.

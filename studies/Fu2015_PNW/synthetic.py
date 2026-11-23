@@ -36,13 +36,14 @@ from pathlib import Path
 
 import numpy as np
 
-from PyGWater.config import FileTool
-from PyGWater.utils.enums import LLN_Data, Displacement
-from PyGWater.earth.love_numbers import LoveNumber
-from PyGWater.basis.green.gf_basis import GreenFunctionBasis
-from PyGWater.inversion.solver import RegularizedLeastSquares
-from PyGWater.inversion.regularization import curvature
-from PyGWater.observations.synthetic import add_noise
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repository root, so that `src` is importable
+from src.config import FileTool
+from src.utils.enums import LLN_Data, Displacement
+from src.earth.love_numbers import LoveNumber
+from src.basis.green.gf_basis import GreenFunctionBasis
+from src.inversion.solver import RegularizedLeastSquares
+from src.inversion.regularization import curvature
+from src.observations.synthetic import add_noise
 
 RES = 0.25
 DOMAIN = (39.5, 51.5, -126.0, -114.5)            # lat_min, lat_max, lon_min, lon_max (west edge: land/coast)

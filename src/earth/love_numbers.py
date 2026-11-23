@@ -1,9 +1,9 @@
 import numpy as np
 import scipy.io as scio
 
-from PyGWater.config import FileTool
+from src.config import FileTool
 
-from PyGWater.utils.enums import LLN_Data, LLN_variable, Frame
+from src.utils.enums import LLN_Data, LLN_variable, Frame
 
 
 class LoveNumber:

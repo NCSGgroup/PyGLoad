@@ -25,14 +25,15 @@ from pathlib import Path
 
 import numpy as np
 
-from PyGWater.config import FileTool
-from PyGWater.utils.enums import Displacement
-from PyGWater.utils.constants import EarthConstant
-from PyGWater.basis.green.gf_basis import GreenFunctionBasis
-from PyGWater.basis.slepian import SlepianBasis
-from PyGWater.inversion.solver import RegularizedLeastSquares
-from PyGWater.inversion.regularization import curvature
-from PyGWater.observations.synthetic import add_noise
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repository root, so that `src` is importable
+from src.config import FileTool
+from src.utils.enums import Displacement
+from src.utils.constants import EarthConstant
+from src.basis.green.gf_basis import GreenFunctionBasis
+from src.basis.slepian import SlepianBasis
+from src.inversion.solver import RegularizedLeastSquares
+from src.inversion.regularization import curvature
+from src.observations.synthetic import add_noise
 from synthetic import setup, checker, RES, WA_OR, BLOCKS, SIGMA_U, H_RATIO, COMPONENTS
 from real_data import SIGMA_U as SIGMA_REAL
 

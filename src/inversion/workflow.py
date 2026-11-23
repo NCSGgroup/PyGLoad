@@ -1,7 +1,7 @@
 """
 Monthly inversion of a GNSS network for the surface load, with any basis:
 
-    from PyGWater.inversion.workflow import MonthlyInversion
+    from src.inversion.workflow import MonthlyInversion
     inv = MonthlyInversion(basis, lln, dataset, components=('U',), R=regularization.curvature(lat, lon, res))
     alpha = inv.choose_alpha(method='gcv')                    # one alpha for all months (median of monthly choices)
     res = inv.run(alpha, lb=0.0)                              # InversionResult: x per month
@@ -21,9 +21,9 @@ try:
 except ImportError:                                  # optional: without it the BLAS default is used
     threadpool_limits = None
 
-from PyGWater.utils.enums import Displacement
-from PyGWater.utils.constants import EarthConstant
-from PyGWater.inversion.solver import RegularizedLeastSquares
+from src.utils.enums import Displacement
+from src.utils.constants import EarthConstant
+from src.inversion.solver import RegularizedLeastSquares
 
 _OBS = {'U': Displacement.Vertical, 'N': Displacement.North, 'E': Displacement.East}
 
@@ -35,9 +35,9 @@ class MonthlyInversion:
         """
         :param basis: any PyGWater Basis (GreenFunctionBasis, SphericalHarmonicBasis, SlepianBasis)
         :param lln: LoveNumber object (choose the frame consistent with the GNSS series, e.g. CF for seasonal loads)
-        :param dataset: GNSSDataset (PyGWater.preprocessing)
+        :param dataset: GNSSDataset (src.preprocessing)
         :param components: subset of dataset.components, e.g. ('U',) or ('U', 'N', 'E')
-        :param R: regularisation matrix (PyGWater.inversion.regularization); default identity
+        :param R: regularisation matrix (src.inversion.regularization); default identity
         :param weights: 'station' (one sigma per station and component, the median over months; fast) or 'month'
                         (the sigma of each monthly value)
         :param sigma_floor: lower bound of the sigmas [m]

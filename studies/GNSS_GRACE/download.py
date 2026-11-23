@@ -7,8 +7,11 @@ Run on a computer with internet access:
 Files go to <data root>/input/gnss/NGL/ (DataHoldings.txt, steps.txt, tenv3/SITE.tenv3); files already present are
 skipped, so the script can be re-run to complete a download. The region and period are those of config.py.
 """
-from PyGWater.config import FileTool
-from PyGWater.preprocessing import ngl
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repository root, so that `src` is importable
+from src.config import FileTool
+from src.preprocessing import ngl
 
 from config import CONFIG
 

@@ -3,19 +3,20 @@ import sys
 from pathlib import Path
 
 
-from PyGWater.config import FileTool
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # repository root, so that `src` is importable
+from src.config import FileTool
 INPUT = str(FileTool.get_input_dir()) + '/'     # <data root>/input/  (data root: installation/pygwater_paths.cfg)
 CACHE = str(FileTool.get_cache_dir()) + '/'     # <data root>/cache/
 OUTPUT = str(FileTool.get_output_dir()) + '/'   # <data root>/output/
 TEMP = str(FileTool.get_temp_dir()) + '/'   # <data root>/temp/
 import pygmt
 import numpy as np
-from PyGWater.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
-from PyGWater.basis.green.disk_load import DiskLoad, EarthConstant
+from src.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
+from src.basis.green.disk_load import DiskLoad, EarthConstant
 
 
 def demo1():
-    from PyGWater.config import FileTool
+    from src.config import FileTool
     lln = LoveNumber().config(lmax=40000, method=LLN_Data.PREM).get_Love_number()
 
     # file = FileTool.get_input_dir('LLN/PREM-LGFs.dat')
@@ -69,7 +70,7 @@ def demo2():
     :return:
     """
 
-    from PyGWater.config import FileTool
+    from src.config import FileTool
     lmax_list = np.arange(100, 40100, 100)
     radius = 0.1
     thickness = 1
@@ -136,7 +137,7 @@ def demo2():
 
 
 def demo3():
-    from PyGWater.config import FileTool
+    from src.config import FileTool
 
     LLN_list = [LLN_Data.PREM,LLN_Data.PREMhard,LLN_Data.PREMsoft]
     U,V,G={},{},{}

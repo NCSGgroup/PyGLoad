@@ -5,10 +5,10 @@ with a synthetic GRACE mascon file holding the same load.
 import numpy as np
 import pytest
 
-import PyGWater as pgw
-from PyGWater.preprocessing import GNSSNetwork
-from PyGWater.inversion.workflow import MonthlyInversion
-from PyGWater.observations.grace import Mascon, compare
+import src as pgw
+from src.preprocessing import GNSSNetwork
+from src.inversion.workflow import MonthlyInversion
+from src.observations.grace import Mascon, compare
 
 RES = 0.5
 LAT1 = np.arange(43 + RES / 2, 49, RES)
@@ -105,7 +105,7 @@ def test_gnss_to_grace(tmp_path, lln):
 
 
 def test_far_field_ignores_the_load_inside_and_predicts_the_load_outside(lln):
-    from PyGWater.observations.grace import far_field
+    from src.observations.grace import far_field
     lat = np.arange(30.125, 60, 0.25)
     lon = np.arange(-20 + 0.125, 30, 0.25)
     lo2, la2 = np.meshgrid(lon, lat)
@@ -122,8 +122,8 @@ def test_far_field_ignores_the_load_inside_and_predicts_the_load_outside(lln):
 
 def test_remove_far_field_keeps_every_gnss_month(lln):
     """a long mascon gap (as GRACE/GRACE-FO 2017-2018) is bridged by a seasonal fit, so no GNSS month is lost"""
-    from PyGWater.observations.grace import remove_far_field
-    from PyGWater.preprocessing import GNSSDataset
+    from src.observations.grace import remove_far_field
+    from src.preprocessing import GNSSDataset
     lat = np.arange(30.125, 60, 0.25)
     lon = np.arange(-20 + 0.125, 30, 0.25)
     gm = ['%d-%02d' % (y, m) for y in range(2014, 2021) for m in range(1, 13)]
@@ -142,8 +142,8 @@ def test_remove_far_field_keeps_every_gnss_month(lln):
 def test_geocentre_is_a_rigid_translation_and_cm_to_cf_removes_it(lln):
     """CM minus CF displacement of a global load = projection of one translation T, at any point and component"""
     import copy
-    from PyGWater.observations.grace import geocentre, unit_vectors, cm_to_cf
-    from PyGWater.preprocessing import GNSSDataset
+    from src.observations.grace import geocentre, unit_vectors, cm_to_cf
+    from src.preprocessing import GNSSDataset
     lat = np.arange(-89, 90, 2.0)
     lon = np.arange(-179, 180, 2.0)
     months = ['2015-%02d' % m for m in range(1, 13)]
@@ -173,7 +173,7 @@ def test_geocentre_is_a_rigid_translation_and_cm_to_cf_removes_it(lln):
 
 def test_common_mode_keeps_a_network_wide_horizontal_signal_out_of_the_load(lln):
     """a uniform north offset (not loading) is estimated as common mode, and the load is recovered"""
-    from PyGWater.preprocessing import GNSSDataset
+    from src.preprocessing import GNSSDataset
     cells = pgw.GreenFunctionBasis.from_grid(LAT1, LON1, RES, kernel='disk')
     rng = np.random.default_rng(3)
     slat, slon = rng.uniform(44.2, 47.8, 60), rng.uniform(4.2, 8.8, 60)
@@ -222,7 +222,7 @@ def test_daily_inversion_matches_the_truth_and_averages_to_months(tmp_path, lln)
     glat, glon = np.arange(44.125, 48, 0.25), np.arange(4.125, 9, 0.25)
     gl2, gb2 = np.meshgrid(glon, glat)
     w = np.cos(np.deg2rad(gb2))
-    from PyGWater.preprocessing.series import epoch_to_decyear
+    from src.preprocessing.series import epoch_to_decyear
     td = np.array([epoch_to_decyear(d) for d in res.months])
     truth = np.sum(w * pattern(gb2, gl2)) / w.sum() * time_function(td)
     est = res.regional_series(glat, glon)
@@ -234,7 +234,7 @@ def test_daily_inversion_matches_the_truth_and_averages_to_months(tmp_path, lln)
 
 
 def test_remove_common_mode_by_stacking():
-    from PyGWater.preprocessing import GNSSDataset
+    from src.preprocessing import GNSSDataset
     rng = np.random.default_rng(5)
     lat, lon = rng.uniform(27, 33, 40), rng.uniform(-99, -91, 40)
     days = ['2017-08-%02d' % d for d in range(1, 31)]

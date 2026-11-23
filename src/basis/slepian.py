@@ -52,9 +52,9 @@ Use SlepianBasis.cs2d_to_vec (inherited from SphericalHarmonicBasis) / vec_to_cs
 import h5py
 import numpy as np
 
-from PyGWater.utils.enums import Displacement
-from PyGWater.earth.love_numbers import LoveNumber
-from PyGWater.basis.spherical_harmonic.sh_basis import SphericalHarmonicBasis
+from src.utils.enums import Displacement
+from src.earth.love_numbers import LoveNumber
+from src.basis.spherical_harmonic.sh_basis import SphericalHarmonicBasis
 
 
 class SlepianBasis(SphericalHarmonicBasis):
@@ -84,7 +84,7 @@ class SlepianBasis(SphericalHarmonicBasis):
     def configure(self, mask, lat, lon, resolution=None, method='auto', beta_floor=1e-6):
         """
         Build the concentration matrix D (Eq. 28) from a regional mask on a regular, cell-centred lat/lon grid,
-        e.g. the output of PyGWater.mesh.shape_mask.basinMask ('basin', 'lat', 'lon', 'resolution').
+        e.g. the output of src.mesh.shape_mask.basinMask ('basin', 'lat', 'lon', 'resolution').
 
         The integral over R is evaluated cell by cell: D = 1/(4pi) sum_cells w Y Y^T dOmega, with dOmega the exact
         cell area cos(lat) dlat dlon. Use a mask resolution clearly finer than 180/L degrees (e.g. <= 0.5 deg
@@ -176,7 +176,7 @@ class SlepianBasis(SphericalHarmonicBasis):
 
     @classmethod
     def from_mask_h5(cls, lmax, h5file, dataset='basin'):
-        """Convenience: build from a mask file written by PyGWater.mesh.shape_mask.basinMask."""
+        """Convenience: build from a mask file written by src.mesh.shape_mask.basinMask."""
         with h5py.File(h5file, 'r') as f:
             mask, lat, lon = f[dataset][()], f['lat'][()], f['lon'][()]
             res = float(f['resolution'][()]) if 'resolution' in f else None
@@ -254,7 +254,7 @@ class SlepianBasis(SphericalHarmonicBasis):
 
 def demo():
     """Spherical cap check: Shannon number of a cap of radius 30 deg is (L+1)^2 (1 - cos 30)/2."""
-    from PyGWater.utils.geomath import GeoMathKit
+    from src.utils.geomath import GeoMathKit
     L, res, cap = 20, 0.5, 30.
     lat, lon = GeoMathKit.global_equal_distance_grid(res)
     lon, lat = np.meshgrid(lon, lat)

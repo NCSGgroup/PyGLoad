@@ -2,7 +2,7 @@
 Nevada Geodetic Laboratory (NGL, University of Nevada, Reno; Blewitt et al., 2018): station list, station selection
 and download of daily .tenv3 time series and the steps (offsets) file.
 
-    from PyGWater.preprocessing import ngl
+    from src.preprocessing import ngl
     ngl.download_catalogue(out_dir)                                   # DataHoldings.txt and steps.txt
     st = ngl.read_holdings(out_dir / 'DataHoldings.txt')
     sites = ngl.select_stations(st, box=(42, 49, -125, -116), start='2006-01', end='2020-12', min_years=5)

@@ -1,7 +1,7 @@
 import numpy as np
 
-from PyGWater.utils.enums import PhysicalDimensions, match_string
-from PyGWater.utils.constants import EarthConstant_3 as GeoConstants
+from src.utils.enums import PhysicalDimensions, match_string
+from src.utils.constants import EarthConstant_3 as GeoConstants
 
 
 class ConvertSHCConfig:

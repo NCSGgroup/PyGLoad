@@ -2,8 +2,8 @@ import warnings
 
 import numpy as np
 
-from PyGWater.utils.enums import PhysicalDimensions
-from PyGWater.utils.mathtool import MathTool
+from src.utils.enums import PhysicalDimensions
+from src.utils.mathtool import MathTool
 
 
 class Harmonic:

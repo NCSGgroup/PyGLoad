@@ -9,9 +9,9 @@ import warnings
 
 import numpy as np
 
-from PyGWater.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
-from PyGWater.basis.green.legendre import Legendre_polynomial
-from PyGWater.utils.constants import EarthConstant
+from src.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
+from src.basis.green.legendre import Legendre_polynomial
+from src.utils.constants import EarthConstant
 
 
 class DiskLoad:
@@ -270,7 +270,7 @@ class DiskLoadTable:
 
 
 def demo():
-    from PyGWater.config import FileTool
+    from src.config import FileTool
     lln = LoveNumber().config(lmax=40000, method=LLN_Data.REF).get_Love_number()
 
     # file = FileTool.get_input_dir('LLN/PREM-LGFs.dat')

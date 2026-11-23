@@ -3,14 +3,15 @@ import sys
 from pathlib import Path
 
 
-from PyGWater.config import FileTool
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # repository root, so that `src` is importable
+from src.config import FileTool
 INPUT = str(FileTool.get_input_dir()) + '/'     # <data root>/input/  (data root: installation/pygwater_paths.cfg)
 CACHE = str(FileTool.get_cache_dir()) + '/'     # <data root>/cache/
 OUTPUT = str(FileTool.get_output_dir()) + '/'   # <data root>/output/
 TEMP = str(FileTool.get_temp_dir()) + '/'   # <data root>/temp/
 import pygmt
 import numpy as np
-from PyGWater.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
+from src.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
 
 
 def demo():

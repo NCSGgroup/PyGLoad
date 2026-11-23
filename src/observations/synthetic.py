@@ -7,7 +7,7 @@ Synthetic GNSS observations for closed-loop and checkerboard tests.
 """
 import numpy as np
 
-from PyGWater.utils.geomath import GeoMathKit
+from src.utils.geomath import GeoMathKit
 
 
 def synthetic_network(inside, n_target=260, min_dist=1.5, bbox=(-90, 90, -180, 180), seed=1, max_tries=200000):

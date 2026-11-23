@@ -1,10 +1,10 @@
-"""Tests of PyGWater.inversion (solver, regularisation) and PyGWater.observations (synthetic observations)."""
+"""Tests of src.inversion (solver, regularisation) and src.observations (synthetic observations)."""
 import numpy as np
 
-from PyGWater.utils.geomath import GeoMathKit
-from PyGWater.inversion.solver import RegularizedLeastSquares
-from PyGWater.inversion.regularization import difference_operator, smoothness, identity
-from PyGWater.observations.synthetic import synthetic_network, checkerboard, add_noise
+from src.utils.geomath import GeoMathKit
+from src.inversion.solver import RegularizedLeastSquares
+from src.inversion.regularization import difference_operator, smoothness, identity
+from src.observations.synthetic import synthetic_network, checkerboard, add_noise
 
 
 def test_solver_recovers_overdetermined_problem():
@@ -60,8 +60,8 @@ def test_choose_alpha_rejects_time_series():
 def test_inversion_warns_when_the_basis_is_finer_than_the_network():
     """a misconfigured spectral basis fits the data as well as a correct one, so PyGWater warns instead"""
     import warnings
-    from PyGWater.inversion.workflow import MonthlyInversion
-    from PyGWater.preprocessing import GNSSDataset
+    from src.inversion.workflow import MonthlyInversion
+    from src.preprocessing import GNSSDataset
 
     class Basis:                               # stands for a spherical-harmonic or Slepian basis of degree L
         n_param = 4
@@ -87,8 +87,8 @@ def test_inversion_warns_when_the_basis_is_finer_than_the_network():
 
 def test_inversion_warns_when_green_function_cells_are_finer_than_the_network():
     import warnings
-    from PyGWater.inversion.workflow import MonthlyInversion
-    from PyGWater.preprocessing import GNSSDataset
+    from src.inversion.workflow import MonthlyInversion
+    from src.preprocessing import GNSSDataset
 
     class Cells:                               # stands for a Green's-function basis of a given cell size
         n_param = 4
@@ -113,7 +113,7 @@ def test_inversion_warns_when_green_function_cells_are_finer_than_the_network():
 
 
 def test_running_mean_of_an_inversion_result():
-    from PyGWater.inversion.workflow import InversionResult
+    from src.inversion.workflow import InversionResult
     x = np.arange(10.0)[:, None] * np.ones((1, 3))
     r = InversionResult(basis=None, months=[str(i) for i in range(10)], x=x, alpha=np.ones(10),
                         n_stations=np.ones(10), fit_rms=np.ones(10), dof=np.ones(10), reference=('0', '9'),

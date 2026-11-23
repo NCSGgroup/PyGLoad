@@ -1,9 +1,9 @@
 import numpy as np
-from PyGWater.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
-from PyGWater.basis.green.disk_load import DiskLoad, DiskLoad_constrain
-from PyGWater.utils.enums import Displacement
-from PyGWater.utils.geomath import GeoMathKit
-from PyGWater.mesh.regular_grid import regular
+from src.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
+from src.basis.green.disk_load import DiskLoad, DiskLoad_constrain
+from src.utils.enums import Displacement
+from src.utils.geomath import GeoMathKit
+from src.mesh.regular_grid import regular
 
 
 class GFA_displacement:
@@ -109,12 +109,12 @@ class GFA_regular_grid(GFA_displacement):
 
 
 def grid2radius(lat_center, grid_size):
-    """Equal-area disk radius of a cell; see PyGWater.mesh.regular_grid.regular.grid2radius (kept here for compatibility)."""
+    """Equal-area disk radius of a cell; see src.mesh.regular_grid.regular.grid2radius (kept here for compatibility)."""
     return regular.grid2radius(lat_center=lat_center, grid_size=grid_size)
 
 
 def grid2radius_type2(lat_center, grid_size):
-    """Spherical-cap version; see PyGWater.mesh.regular_grid.regular.grid2radius_type2 (kept here for compatibility)."""
+    """Spherical-cap version; see src.mesh.regular_grid.regular.grid2radius_type2 (kept here for compatibility)."""
     return regular.grid2radius_type2(lat_center=lat_center, grid_size=grid_size)
 
 
@@ -125,7 +125,7 @@ def Mass(r, thickness):
     :param grid_size: equal-distance grid, grid interval, e.g., 1 degree
     :return: theta_radius [degree], length_radius [m]
     """
-    from PyGWater.utils.constants import EarthConstant
+    from src.utils.constants import EarthConstant
 
     M1 = 2 * np.pi * EarthConstant.radiusm ** 2 * (
                 1 - np.cos(r / EarthConstant.radiusm)) * EarthConstant.rhow * thickness

@@ -7,14 +7,16 @@ Results: <data root>/output/inversion_PNW_Fu2015/damping_summary.csv
 import os, sys, time, warnings
 from pathlib import Path
 import numpy as np
-from PyGWater.config import FileTool
-from PyGWater.basis.green.gf_basis import GreenFunctionBasis
-from PyGWater.inversion.solver import RegularizedLeastSquares
-from PyGWater.inversion.regularization import area_weighted_identity
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repository root, so that `src` is importable
+from src.config import FileTool
+from src.basis.green.gf_basis import GreenFunctionBasis
+from src.inversion.solver import RegularizedLeastSquares
+from src.inversion.regularization import area_weighted_identity
 from synthetic import setup, make_bases, checker, RES, WA_OR, BLOCKS, SIGMA_U, H_RATIO, COMPONENTS
 from slepian import write_csv
-from PyGWater.observations.synthetic import add_noise
-from PyGWater.utils.enums import Displacement
+from src.observations.synthetic import add_noise
+from src.utils.enums import Displacement
 
 
 def run(seed=7):

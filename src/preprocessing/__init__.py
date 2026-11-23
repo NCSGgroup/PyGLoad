@@ -6,6 +6,6 @@ GNSS preprocessing: from raw daily station series to monthly displacement anomal
     trajectory   trajectory model (trend, offsets, post-seismic, seasonal) with outlier rejection
     network      GNSSNetwork (clean, quality control, monthly means, common reference period) and GNSSDataset
 """
-from PyGWater.preprocessing.series import COMPONENTS, StationSeries, Step, read_tenv3, read_ngl_steps
-from PyGWater.preprocessing.trajectory import trajectory_design, fit_trajectory
-from PyGWater.preprocessing.network import GNSSNetwork, GNSSDataset
+from src.preprocessing.series import COMPONENTS, StationSeries, Step, read_tenv3, read_ngl_steps
+from src.preprocessing.trajectory import trajectory_design, fit_trajectory
+from src.preprocessing.network import GNSSNetwork, GNSSDataset

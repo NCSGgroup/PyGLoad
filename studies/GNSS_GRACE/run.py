@@ -13,12 +13,15 @@ import time
 
 import numpy as np
 
-import PyGWater as pgw
-from PyGWater.config import FileTool
-from PyGWater.preprocessing import GNSSNetwork, GNSSDataset, read_ngl_steps, ngl
-from PyGWater.inversion.workflow import MonthlyInversion
-from PyGWater.observations.grace import Mascon, compare, remove_far_field, cm_to_cf
-from PyGWater.mesh.land import land_fraction
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repository root, so that `src` is importable
+import src as pgw
+from src.config import FileTool
+from src.preprocessing import GNSSNetwork, GNSSDataset, read_ngl_steps, ngl
+from src.inversion.workflow import MonthlyInversion
+from src.observations.grace import Mascon, compare, remove_far_field, cm_to_cf
+from src.mesh.land import land_fraction
 
 from config import CONFIG as C
 

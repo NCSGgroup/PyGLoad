@@ -72,7 +72,7 @@ class GeoMathKit:
         Vertical, Geoheight, Horizontal (great-circle, away from load), North, East, Gravity.
         :param kwargs: passed to getGravity (e.g. newtonian='above')
         """
-        from PyGWater.utils.enums import Displacement
+        from src.utils.enums import Displacement
         theta = GeoMathKit.angular_distance(load_lat, load_lon, points_lat, points_lon)
         obj.configure(residence=theta)
         if variable == Displacement.Vertical:

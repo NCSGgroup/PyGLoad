@@ -1,9 +1,9 @@
-"""Tests of PyGWater.preprocessing on a synthetic NGL .tenv3 file (no external data needed)."""
+"""Tests of src.preprocessing on a synthetic NGL .tenv3 file (no external data needed)."""
 import numpy as np
 
-from PyGWater.preprocessing.network import GNSSNetwork
-from PyGWater.preprocessing.trajectory import fit_trajectory
-from PyGWater.preprocessing.series import (read_tenv3, read_ngl_steps, _decyear_to_month,
+from src.preprocessing.network import GNSSNetwork
+from src.preprocessing.trajectory import fit_trajectory
+from src.preprocessing.series import (read_tenv3, read_ngl_steps, _decyear_to_month,
                           _yymmmdd_to_decyear)
 
 HEADER = ('site YYMMMDD yyyy.yyyy __MJD week d reflon _e0(m) __east(m) ____n0(m) _north(m) u0(m) ____up(m) '

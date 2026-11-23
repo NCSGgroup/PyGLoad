@@ -3,7 +3,8 @@ import sys
 from pathlib import Path
 
 
-from PyGWater.config import FileTool
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # repository root, so that `src` is importable
+from src.config import FileTool
 INPUT = str(FileTool.get_input_dir()) + '/'     # <data root>/input/  (data root: installation/pygwater_paths.cfg)
 CACHE = str(FileTool.get_cache_dir()) + '/'     # <data root>/cache/
 OUTPUT = str(FileTool.get_output_dir()) + '/'   # <data root>/output/
@@ -13,14 +14,14 @@ TEMP = str(FileTool.get_temp_dir()) + '/'   # <data root>/temp/
 import pygmt
 import numpy as np
 
-from PyGWater.utils.enums import Displacement
-from PyGWater.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
-from PyGWater.basis.green.disk_load import DiskLoad, EarthConstant
-from PyGWater.forward.disk import GFA_displacement, grid2radius, GFA_regular_grid
+from src.utils.enums import Displacement
+from src.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
+from src.basis.green.disk_load import DiskLoad, EarthConstant
+from src.forward.disk import GFA_displacement, grid2radius, GFA_regular_grid
 import netCDF4 as nc
 from pathlib import Path
-from PyGWater.utils.geomath import GeoMathKit
-from PyGWater.forward.disk_cluster import GFA_displacement_from_template
+from src.utils.geomath import GeoMathKit
+from src.forward.disk_cluster import GFA_displacement_from_template
 
 
 def demo1_convolve():

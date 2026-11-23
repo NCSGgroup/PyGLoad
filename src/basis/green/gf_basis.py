@@ -31,12 +31,12 @@ DiskLoad.required_lmax; about 12 800 for a 0.1-deg sub-grid at the equator).
 
 import numpy as np
 
-from PyGWater.utils.constants import EarthConstant
-from PyGWater.utils.enums import Displacement
-from PyGWater.utils.geomath import GeoMathKit
-from PyGWater.basis.base import Basis
-from PyGWater.basis.green.point_load import LGF_truncation
-from PyGWater.basis.green.disk_load import DiskLoad, DiskLoadTable
+from src.utils.constants import EarthConstant
+from src.utils.enums import Displacement
+from src.utils.geomath import GeoMathKit
+from src.basis.base import Basis
+from src.basis.green.point_load import LGF_truncation
+from src.basis.green.disk_load import DiskLoad, DiskLoadTable
 
 
 class GreenFunctionBasis(Basis):
@@ -95,7 +95,7 @@ class GreenFunctionBasis(Basis):
         Point mass: exact cell area a^2 cos(lat) dlat dlon;  disk: equal-area radius (RegularGrid.grid2radius);
         cluster_disk: pass subgrid=... (e.g. 0.1).
         """
-        from PyGWater.mesh.regular_grid import regular
+        from src.mesh.regular_grid import regular
         lo2, la2 = np.meshgrid(np.asarray(lon, dtype=float), np.asarray(lat, dtype=float))
         sel = np.ones(la2.shape, bool) if mask is None else np.asarray(mask) > 0
         la, lo = la2[sel], lo2[sel]
@@ -118,7 +118,7 @@ class GreenFunctionBasis(Basis):
 
     def sub_cells(self, j):
         """sub-cell centres (lat, lon) [degree] and equal-area disk radii [degree] of cell j (cluster_disk)"""
-        from PyGWater.mesh.regular_grid import regular
+        from src.mesh.regular_grid import regular
         off = self._sub_offsets()
         lo2, la2 = np.meshgrid(self.lon[j] + off, self.lat[j] + off)
         r = np.round(regular.grid2radius(lat_center=la2, grid_size=self.subgrid)[0], 10)
@@ -140,7 +140,7 @@ class GreenFunctionBasis(Basis):
             kernels = {r: DiskLoad(lln=lln, radius=r, thickness=1, check_lmax=self.check_lmax)
                        for r in np.unique(self.radius)}
         else:
-            from PyGWater.mesh.regular_grid import regular
+            from src.mesh.regular_grid import regular
             sub_lat = (self.lat[:, None] + self._sub_offsets()[None, :]).ravel()
             radii = regular.grid2radius(lat_center=np.unique(sub_lat), grid_size=self.subgrid)[0]
             kernels = DiskLoadTable(lln, radii, thickness=1, check_lmax=self.check_lmax)

@@ -7,13 +7,13 @@ import h5py
 import netCDF4
 import numpy as np
 
-from PyGWater.utils.mathtool import MathTool
-from PyGWater.basis.spherical_harmonic.core_grid import CoreGRID
-from PyGWater.basis.spherical_harmonic.core_shc import CoreSHC
-import PyGWater.utils.enums as Enums
-from PyGWater.basis.spherical_harmonic.convert_shc import ConvertSHC
-from PyGWater.basis.spherical_harmonic.harmonic import Harmonic
-from PyGWater.earth.love_numbers import LoveNumber, LLN_variable
+from src.utils.mathtool import MathTool
+from src.basis.spherical_harmonic.core_grid import CoreGRID
+from src.basis.spherical_harmonic.core_shc import CoreSHC
+import src.utils.enums as Enums
+from src.basis.spherical_harmonic.convert_shc import ConvertSHC
+from src.basis.spherical_harmonic.harmonic import Harmonic
+from src.earth.love_numbers import LoveNumber, LLN_variable
 
 
 class SHC(CoreSHC):
@@ -144,7 +144,7 @@ class SHC(CoreSHC):
         :param kwargs: newtonian='below'|'above'|'none' (Gravity), height=[m] (GravityDisturbance)
         :return: GRID (m, or m/s^2 for gravity)
         """
-        from PyGWater.earth import observables as Observables
+        from src.earth import observables as Observables
         lmax = self.get_lmax()
         if lln is None:
             class _L:  # minimal LoveNumber-like wrapper around the attached Love numbers

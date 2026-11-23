@@ -11,12 +11,15 @@ Checks of a GNSS_GRACE run (after run.py), written to <data root>/output/GNSS_GR
 """
 import numpy as np
 
-import PyGWater as pgw
-from PyGWater.config import FileTool
-from PyGWater.preprocessing import GNSSDataset
-from PyGWater.observations.grace import Mascon
-from PyGWater.mesh.land import land_fraction
-from PyGWater.utils.constants import EarthConstant
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repository root, so that `src` is importable
+import src as pgw
+from src.config import FileTool
+from src.preprocessing import GNSSDataset
+from src.observations.grace import Mascon
+from src.mesh.land import land_fraction
+from src.utils.constants import EarthConstant
 
 from config import CONFIG as C
 

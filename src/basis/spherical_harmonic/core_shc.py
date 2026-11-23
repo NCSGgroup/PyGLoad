@@ -2,7 +2,7 @@ import copy
 
 import numpy as np
 
-from PyGWater.utils.mathtool import MathTool
+from src.utils.mathtool import MathTool
 
 
 class CoreSHC:

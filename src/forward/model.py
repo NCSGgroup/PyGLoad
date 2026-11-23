@@ -1,7 +1,7 @@
 """
-Basis-independent forward model: load (EWH) -> observables at points, for any Basis of PyGWater.basis.
+Basis-independent forward model: load (EWH) -> observables at points, for any Basis of src.basis.
 
-    from PyGWater.forward.model import ForwardModel
+    from src.forward.model import ForwardModel
     fm = ForwardModel(basis, lln)                       # basis: SphericalHarmonicBasis, SlepianBasis, GreenFunctionBasis
     x = fm.parameterize(ewh, lat, lon)                  # gridded EWH [m] (nlat, nlon) or (ntime, nlat, nlon) -> x
     out = fm.run(x, sta_lat, sta_lon, observables=(Displacement.Vertical, Displacement.North, Displacement.East))
@@ -13,15 +13,15 @@ cluster-disk templates; ForwardModel is the common entry point used by the flow 
 
 import numpy as np
 
-from PyGWater.utils.enums import Displacement
-from PyGWater.basis.base import Basis
+from src.utils.enums import Displacement
+from src.basis.base import Basis
 
 
 class ForwardModel:
 
     def __init__(self, basis: Basis, lln):
         """
-        :param basis: any PyGWater.basis.base.Basis
+        :param basis: any src.basis.base.Basis
         :param lln: LoveNumber object (Earth model, frame, maximum degree)
         """
         self.basis = basis

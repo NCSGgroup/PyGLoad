@@ -4,17 +4,17 @@ Tests of the common Basis interface (src/basis/base.py) and the basis-independen
 import numpy as np
 import pytest
 
-from PyGWater.utils.enums import LLN_Data, Displacement
-from PyGWater.utils.geomath import GeoMathKit
-from PyGWater.utils.constants import EarthConstant
-from PyGWater.earth.love_numbers import LoveNumber
-from PyGWater.earth import observables as Observables
-from PyGWater.basis.base import Basis
-from PyGWater.basis.spherical_harmonic.sh_basis import SphericalHarmonicBasis
-from PyGWater.basis.slepian import SlepianBasis
-from PyGWater.basis.green.gf_basis import GreenFunctionBasis
-from PyGWater.forward.model import ForwardModel
-from PyGWater.forward import point_mass as PointMass, disk as Disk
+from src.utils.enums import LLN_Data, Displacement
+from src.utils.geomath import GeoMathKit
+from src.utils.constants import EarthConstant
+from src.earth.love_numbers import LoveNumber
+from src.earth import observables as Observables
+from src.basis.base import Basis
+from src.basis.spherical_harmonic.sh_basis import SphericalHarmonicBasis
+from src.basis.slepian import SlepianBasis
+from src.basis.green.gf_basis import GreenFunctionBasis
+from src.forward.model import ForwardModel
+from src.forward import point_mass as PointMass, disk as Disk
 
 RES = 2.0
 LMAX = 90
@@ -127,8 +127,8 @@ def test_los_and_load_synthesis(lln, load):
 @pytest.mark.filterwarnings("ignore::UserWarning")
 def test_cluster_disk_basis_equals_templates(tmp_path):
     """CD-LGF basis (tabulated kernels, any points) == direct sum of sub-disks in src/forward/disk_cluster.py"""
-    from PyGWater.forward.disk_cluster import cluster_disk
-    from PyGWater.basis.green.disk_load import DiskLoad, DiskLoadTable
+    from src.forward.disk_cluster import cluster_disk
+    from src.basis.green.disk_load import DiskLoad, DiskLoadTable
     lln = LoveNumber().config(lmax=3000, method=LLN_Data.PREM).get_Love_number()
 
     psi = np.r_[np.linspace(0, 0.5, 400)[1:], np.linspace(0.5, 180, 400)]
@@ -155,7 +155,7 @@ def test_cluster_disk_basis_equals_templates(tmp_path):
 
 def test_slepian_svd_matches_eigh():
     import numpy as np
-    from PyGWater.basis.slepian import SlepianBasis
+    from src.basis.slepian import SlepianBasis
     lat1 = np.arange(30.25, 50, 0.5); lon1 = np.arange(80.25, 100, 0.5)
     lo, la = np.meshgrid(lon1, lat1)
     m = ((la - 40) ** 2 + (lo - 90) ** 2 < 49).astype(float)

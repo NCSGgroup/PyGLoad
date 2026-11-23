@@ -19,11 +19,11 @@ The same three methods therefore serve forward modelling (x known -> d) and inve
 
 Implementations
 ---------------
-    PyGWater.basis.spherical_harmonic.sh_basis.SphericalHarmonicBasis   x = SH coefficients of EWH (global, degree <= L)
-    PyGWater.basis.slepian.SlepianBasis                       x = Slepian coefficients of EWH (regional)
-    PyGWater.basis.green.gf_basis.GreenFunctionBasis           x = EWH of point masses or disks (cells)
+    src.basis.spherical_harmonic.sh_basis.SphericalHarmonicBasis   x = SH coefficients of EWH (global, degree <= L)
+    src.basis.slepian.SlepianBasis                       x = Slepian coefficients of EWH (regional)
+    src.basis.green.gf_basis.GreenFunctionBasis           x = EWH of point masses or disks (cells)
 
-Observables (argument `variable`, PyGWater.utils.enums.Displacement) are defined once in
+Observables (argument `variable`, src.utils.enums.Displacement) are defined once in
 src/earth/observables.py; InSAR line of sight is built from East, North and Vertical (design_matrix_los).
 """
 
@@ -31,7 +31,7 @@ from abc import ABC, abstractmethod
 
 import numpy as np
 
-from PyGWater.utils.enums import Displacement
+from src.utils.enums import Displacement
 
 
 class Basis(ABC):

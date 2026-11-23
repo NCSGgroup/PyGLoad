@@ -22,8 +22,8 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from PyGWater.preprocessing.series import COMPONENTS, Step, read_tenv3, _decyear_to_month, _decyear_to_day
-from PyGWater.preprocessing.trajectory import (trajectory_design, fit_trajectory, seasonal_amplitude, clean_segments,
+from src.preprocessing.series import COMPONENTS, Step, read_tenv3, _decyear_to_month, _decyear_to_day
+from src.preprocessing.trajectory import (trajectory_design, fit_trajectory, seasonal_amplitude, clean_segments,
                                                detect_jumps as find_jumps)
 
 
@@ -256,7 +256,7 @@ class GNSSNetwork:
         Stations with fewer than `min_neighbours` neighbours (or `min_common` common months) are kept and flagged.
         Run after monthly(). :return: self
         """
-        from PyGWater.utils.geomath import GeoMathKit
+        from src.utils.geomath import GeoMathKit
         st = self.stations
         if len(st) < min_neighbours + 1:
             return self

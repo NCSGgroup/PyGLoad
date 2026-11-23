@@ -1,9 +1,9 @@
 import numpy as np
-from PyGWater.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
-from PyGWater.basis.green.point_load import LGF_truncation
-from PyGWater.utils.enums import Displacement
-from PyGWater.utils.geomath import GeoMathKit
-from PyGWater.utils.constants import EarthConstant
+from src.earth.love_numbers import LoveNumber, LLN_Data, LLN_variable, Frame
+from src.basis.green.point_load import LGF_truncation
+from src.utils.enums import Displacement
+from src.utils.geomath import GeoMathKit
+from src.utils.constants import EarthConstant
 
 
 class GFA_displacement:
@@ -96,7 +96,7 @@ class GFA_regular_grid(GFA_displacement):
 
 
 class Grids_generation:
-    """Kept for compatibility; see PyGWater.mesh.regular_grid.regular.global_grid_for_pointmass."""
+    """Kept for compatibility; see src.mesh.regular_grid.regular.global_grid_for_pointmass."""
 
     @staticmethod
     def Equal_angular_distance(resolution=0.5, Earth_radius=EarthConstant.radiusm):
@@ -105,5 +105,5 @@ class Grids_generation:
         :param Earth_radius: [meter]
         :return: dict with flattened 'lat', 'lon' [degree] and 'area' [m^2] of a global cell-centred grid
         """
-        from PyGWater.mesh.regular_grid import regular
+        from src.mesh.regular_grid import regular
         return regular.global_grid_for_pointmass(resolution=resolution, Earth_radius=Earth_radius)

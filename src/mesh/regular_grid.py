@@ -1,6 +1,6 @@
 import numpy as np
-from PyGWater.utils.constants import EarthConstant
-from PyGWater.utils.geomath import GeoMathKit
+from src.utils.constants import EarthConstant
+from src.utils.geomath import GeoMathKit
 
 
 class regular:
@@ -13,7 +13,7 @@ class regular:
         :param grid_size: equal-distance grid, grid interval, e.g., 1 degree
         :return: theta_radius [degree], length_radius [m]
         """
-        from PyGWater.utils.constants import EarthConstant
+        from src.utils.constants import EarthConstant
         example = 30  # longitude, but indeed the choice could be arbitrary.
 
         a = GeoMathKit.angular_distance(point1_lat=lat_center + grid_size / 2, point1_lon=example,
@@ -35,7 +35,7 @@ class regular:
         :param grid_size: equal-distance grid, grid interval, e.g., 1 degree
         :return: theta_radius [degree], length_radius [m]
         """
-        from PyGWater.utils.constants import EarthConstant
+        from src.utils.constants import EarthConstant
 
         area = np.cos(np.deg2rad(lat_center)) * np.deg2rad(grid_size) ** 2
 

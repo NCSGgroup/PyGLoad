@@ -7,7 +7,7 @@ import shapely.vectorized
 import pandas as pd
 import h5py
 
-from PyGWater.config import FileTool
+from src.config import FileTool
 
 
 def box2shp(box_area=(70.1, 33.9, -11.1, 45.1)):

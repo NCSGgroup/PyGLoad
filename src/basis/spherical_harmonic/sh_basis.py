@@ -1,11 +1,11 @@
 """
-Spherical harmonics as a Basis (basis/base.py): x = 4pi-normalised SH coefficients of the load EWH [m] up to
+Spherical harmonics as a Basis (src/basis/base.py): x = 4pi-normalised SH coefficients of the load EWH [m] up to
 degree L, in vector form. This is the point-wise counterpart of the grid synthesis in harmonic.py / data_class.py
 and the parent class of the Slepian basis.
 
         d(points) = Y(points) @ diag(F_n X_n) @ x        (Eq. 2 of Yang et al., 2025, generalised to any observable)
 
-with F_n X_n the Love-number factor of the observable (earth/observables.love_factor).
+with F_n X_n the Love-number factor of the observable (src/earth/observables.love_factor).
 
 Coefficient ordering
 --------------------
@@ -105,13 +105,13 @@ class SphericalHarmonicBasis(Basis):
 
     @staticmethod
     def _component(variable):
-        """'value', 'north' or 'east', from the observable table in earth/observables.py"""
+        """'value', 'north' or 'east', from the observable table in src/earth/observables.py"""
         return Observables.kind(variable)
 
     def _displacement_factor(self, lln, variable=Displacement.Vertical, **kwargs):
         """
         Per-coefficient factor from load (EWH) to the observable (Eq. 2 / Eq. 30), taken from the observable table
-        (earth/observables.love_factor), e.g. 3 rho_w / rho_e * h_n / (2n+1) for Vertical.
+        (src/earth/observables.love_factor), e.g. 3 rho_w / rho_e * h_n / (2n+1) for Vertical.
         :param kwargs: newtonian=... (Gravity), height=... (GravityDisturbance)
         """
         return Observables.love_factor(variable, lln, self.idx_n, **kwargs)
@@ -126,7 +126,7 @@ class SphericalHarmonicBasis(Basis):
     def design_matrix(self, lat, lon, lln, variable=Displacement.Vertical, **kwargs):
         """
         A (N x n_param): observable at points per unit parameter of the load (EWH, metre).
-        :param variable: any observable of earth/observables.py; kwargs newtonian=..., height=...
+        :param variable: any observable of src/earth/observables.py; kwargs newtonian=..., height=...
         """
         lat, lon = np.atleast_1d(lat), np.atleast_1d(lon)
         f = self._displacement_factor(lln, variable, **kwargs)[None, :]

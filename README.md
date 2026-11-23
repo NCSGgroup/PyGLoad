@@ -35,11 +35,9 @@ Step-by-step instructions are in the [installation guide](doc/installation.md).
 
 ## Repository layout
 
-The repository folder is itself the Python package `PyGWater` (`import PyGWater`); every folder below is a subpackage.
-
 | Folder | Content |
 |---|---|
-| [basis/](basis), [earth/](earth), [forward/](forward), [inversion/](inversion), [observations/](observations), [preprocessing/](preprocessing), [mesh/](mesh), [utils/](utils) | the library |
+| [src/](src) | the core code, imported as `PyGWater` |
 | [examples/](examples) | short demonstrations |
 | [studies/](studies) | complete, reproducible studies |
 | [tests/](tests) | automated tests |

@@ -2,8 +2,8 @@
 PyGWater: elastic loading deformation of the Earth (GNSS displacement, geoid, gravity) from surface water loads,
 and the inversion of GNSS observations for those loads, with a choice of basis functions (Yang et al., 2025).
 
-The repository folder PyGWater/ is the package, imported as `PyGWater` once installed (`pip install -e .` in the
-repository folder, see doc/installation.md); studies, examples and tests are its subpackages. The main classes are available directly:
+The code lives in the folder src/ of the repository and is imported as `PyGWater` once installed
+(`pip install -e .` in the repository folder, see doc/installation.md). The main classes are available directly:
 
     import PyGWater as pgw
     lln = pgw.LoveNumber().config(lmax=13000, method=pgw.LLN_Data.Wang).get_Love_number()
@@ -13,7 +13,6 @@ repository folder, see doc/installation.md); studies, examples and tests are its
 
 Subpackages: earth (Love numbers, observables), basis (spherical harmonics, Green's functions, Slepian),
 forward, inversion, observations (GNSS, synthetic), mesh (grids, masks), utils; config holds the data root.
-Published scripts: studies, examples, tests (PyGWater.studies, ...).
 """
 __version__ = '0.9.0'
 

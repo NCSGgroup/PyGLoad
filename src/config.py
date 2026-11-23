@@ -7,11 +7,10 @@ class FileTool:
     @staticmethod
     def get_project_dir(sub=None, *, relative=False):
         """
-        Root directory of the PyGWater repository, which is also the package folder (contains __init__.py, examples/,
-        studies/, installation/).
+        Root directory of the PyGWater repository (the folder that contains src/, examples/, studies/, installation/).
         Resolved from the location of this file, so it no longer depends on the current working directory.
         """
-        dir_of_project = Path(__file__).resolve().parent
+        dir_of_project = Path(__file__).resolve().parents[1]
 
         if relative:
             import os

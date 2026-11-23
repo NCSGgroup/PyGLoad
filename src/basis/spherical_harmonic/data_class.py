@@ -136,7 +136,7 @@ class SHC(CoreSHC):
 
     def synthesis_observable(self, grid_space, variable, lln: LoveNumber = None, **kwargs):
         """
-        Synthesis of any loading observable (earth/observables.py) on a global grid, with THIS SHC being the
+        Synthesis of any loading observable (src/earth/observables.py) on a global grid, with THIS SHC being the
         load in EWH [m]. Synthesis only: no analysis of the observable is involved.
         :param grid_space: grid spacing [degree]
         :param variable: enums.Displacement: Vertical, North, East, Geoheight, Gravity, GravityDisturbance

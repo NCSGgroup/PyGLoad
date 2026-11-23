@@ -80,13 +80,13 @@ with **identical constants and Love numbers**, so they can be compared and swapp
 See [installation.md](installation.md) for the environment, the external data (Love numbers in `<data root>/input/LLN/`,
 data root set in `installation/pygwater_paths.cfg` or by `PYGWATER_DATA`) and how to run the code.
 
-After `pip install -e .` the repository folder is the package `PyGWater`. The main classes are available at
+After `pip install -e .` the library (folder `src/`) is imported as `PyGWater`. The main classes are available at
 the top level (`import PyGWater as pgw`: `pgw.LoveNumber`, `pgw.GreenFunctionBasis`, `pgw.SlepianBasis`,
 `pgw.ForwardModel`, `pgw.RegularizedLeastSquares`, `pgw.Displacement`, ...); the subpackages are:
 
 | Package (folder) | Content |
 |---|---|
-| `PyGWater.config` (`config.py`) | data root: `FileTool.get_input_dir()`, `get_cache_dir()`, `get_output_dir()`, ... |
+| `PyGWater.config` (`src/config.py`) | data root: `FileTool.get_input_dir()`, `get_cache_dir()`, `get_output_dir()`, ... |
 | `PyGWater.earth` | load Love numbers (`love_numbers.py`) and observable definitions (`observables.py`) |
 | `PyGWater.basis` | common interface `base.py` (class `Basis`); `slepian.py` (class `SlepianBasis`) |
 | `PyGWater.basis.spherical_harmonic` | `data_class.py` (SHC, GRID), `harmonic.py`, `convert_shc.py`, `sh_basis.py` |
@@ -144,7 +144,7 @@ Data are read on `get_Love_number()` or on first access to `.LLN`. Degree 0: h_0
 ## 5. Observables
 
 Observables are members of `PyGWater.utils.enums.Displacement` (alias `Observables.Observable`). Their
-definitions live in **one** table, `earth/observables.py`, which spherical harmonics and Slepian functions
+definitions live in **one** table, `src/earth/observables.py`, which spherical harmonics and Slepian functions
 read. Green's-function kernels implement each observable individually.
 
 | `variable` | Quantity | Unit | Extra options | SH | Slepian | Point LGF | D-LGF / CD-LGF |
@@ -409,9 +409,9 @@ x to any observable at any point: d = A x. All bases derive from `PyGWater.basis
 
 | Basis | Parameters x | Constructor |
 |---|---|---|
-| `SphericalHarmonicBasis(lmax)` | SH coefficients of EWH, (L+1)^2 (ordering: degree, cosine m=0..n, sine m=1..n) | `basis/spherical_harmonic/sh_basis.py` |
-| `SlepianBasis(lmax).configure(mask, lat, lon).truncate(...)` | Slepian coefficients of EWH, Lc | `basis/slepian.py` |
-| `GreenFunctionBasis.from_grid(lat, lon, res, mask=None, kernel='point_mass' \| 'disk' \| 'cluster_disk', subgrid=0.1)` | EWH per cell | `basis/green/gf_basis.py` |
+| `SphericalHarmonicBasis(lmax)` | SH coefficients of EWH, (L+1)^2 (ordering: degree, cosine m=0..n, sine m=1..n) | `src/basis/spherical_harmonic/sh_basis.py` |
+| `SlepianBasis(lmax).configure(mask, lat, lon).truncate(...)` | Slepian coefficients of EWH, Lc | `src/basis/slepian.py` |
+| `GreenFunctionBasis.from_grid(lat, lon, res, mask=None, kernel='point_mass' \| 'disk' \| 'cluster_disk', subgrid=0.1)` | EWH per cell | `src/basis/green/gf_basis.py` |
 
 `load_parameters` performs SH analysis (`method='auto'`, see 6.1) for the SH basis, SH analysis followed by projection
 onto the retained Slepian functions for the Slepian basis, and samples the grid at the cell centres for the
@@ -434,7 +434,7 @@ A = fm.design_matrix(sta_lat, sta_lon, observables=(Displacement.Vertical, 'LOS'
 ```
 
 `run` returns a dict {observable: values}; `design_matrix` stacks the observables row-wise (observable by
-observable). The grid convolutions in `forward/point_mass.py`, `disk.py` and `disk_cluster.py` remain the faster
+observable). The grid convolutions in `src/forward/point_mass.py`, `disk.py` and `disk_cluster.py` remain the faster
 choice for global grids; `disk_cluster.py` keeps the template route of the CD-LGF.
 
 ---
@@ -505,7 +505,7 @@ Rm, Cx = solver.resolution_matrix(alpha), solver.covariance(alpha)
 | `Regularization.smoothness(lat, lon, res)` | first differences between neighbouring cells (graph Laplacian), mascon bases |
 | `Regularization.area_weighted_identity(lat)` | mean-square EWH over the cells |
 
-`observations/synthetic.py` provides `synthetic_network` (Poisson-disk station positions inside a region), `add_noise`
+`src/observations/synthetic.py` provides `synthetic_network` (Poisson-disk station positions inside a region), `add_noise`
 and `checkerboard` for closed-loop tests; `studies/China/inversion.py` runs closed-loop and checkerboard
 tests over China for CD-LGF, point-mass and Slepian bases.
 
@@ -561,7 +561,7 @@ takes seconds. Any basis works. The whole chain, with settings in one file, is `
 
 ## 10. Regional masks
 
-`mesh/shape_mask.py` (requires geopandas and shapely):
+`src/mesh/shape_mask.py` (requires geopandas and shapely):
 
 | Class / function | Purpose |
 |---|---|
@@ -574,7 +574,7 @@ takes seconds. Any basis works. The whole chain, with settings in one file, is `
 
 ## 11. Physical constants
 
-`utils/constants.py` is the single source of truth, used by every basis:
+`src/utils/constants.py` is the single source of truth, used by every basis:
 
 | Constant | Value | Note |
 |---|---|---|

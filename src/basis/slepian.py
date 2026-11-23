@@ -236,7 +236,7 @@ class SlepianBasis(SphericalHarmonicBasis):
     def forward(self, load_cqlm, load_sqlm, lln: LoveNumber, lat, lon, variable=Displacement.Vertical, **kwargs):
         """
         Observable at points (lat, lon) from the truncated Slepian representation (m, or m/s^2 for gravity).
-        :param variable: any observable of earth/observables.py: Vertical (default), North, East, Geoheight,
+        :param variable: any observable of src/earth/observables.py: Vertical (default), North, East, Geoheight,
                          Gravity (kwarg newtonian='below'|'above'|'none'), GravityDisturbance (kwarg height=[m])
         """
         S = self.displacement_coefficients(load_cqlm, load_sqlm, lln, variable, **kwargs)

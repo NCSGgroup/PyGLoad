@@ -24,7 +24,7 @@ Implementations
     PyGWater.basis.green.gf_basis.GreenFunctionBasis           x = EWH of point masses or disks (cells)
 
 Observables (argument `variable`, PyGWater.utils.enums.Displacement) are defined once in
-earth/observables.py; InSAR line of sight is built from East, North and Vertical (design_matrix_los).
+src/earth/observables.py; InSAR line of sight is built from East, North and Vertical (design_matrix_los).
 """
 
 from abc import ABC, abstractmethod

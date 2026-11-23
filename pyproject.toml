@@ -21,13 +21,13 @@ figures = ["pygmt"]
 [project.urls]
 Repository = "https://github.com/NCSGgroup/PyGWater"
 
-# The repository folder PyGWater/ is itself the package: `import PyGWater` loads __init__.py at the top, the library
-# subpackages (basis, earth, forward, ...) sit next to the published studies, examples, tests, documentation and
-# installation files, which are PyGWater.studies, PyGWater.examples, PyGWater.tests, PyGWater.doc and
-# PyGWater.installation. Personal files and the local-only studies (JGR2025_basis_functions, GNSS_TWS_validation) are
-# not published (see .gitignore).
+# The released package is the whole public repository: the core code (src/) is imported as `PyGWater`; the published
+# studies, examples, tests, documentation and installation files ship inside it as PyGWater.studies, PyGWater.examples,
+# PyGWater.tests, PyGWater.doc and PyGWater.installation, without moving any folder. Personal files and the local-only
+# studies (JGR2025_basis_functions, GNSS_TWS_validation) are not published (see .gitignore).
+# Details: doc/installation.md, "What the installed package contains".
 [tool.setuptools]
-package-dir = { "PyGWater" = "." }
+package-dir = { "PyGWater" = "src", "PyGWater.studies" = "studies", "PyGWater.examples" = "examples", "PyGWater.tests" = "tests", "PyGWater.doc" = "doc", "PyGWater.installation" = "installation" }
 packages = ["PyGWater", "PyGWater.utils", "PyGWater.earth", "PyGWater.basis", "PyGWater.basis.spherical_harmonic",
             "PyGWater.basis.green", "PyGWater.forward", "PyGWater.inversion", "PyGWater.observations", "PyGWater.preprocessing", "PyGWater.mesh",
             "PyGWater.studies", "PyGWater.studies.China", "PyGWater.studies.Fu2015_PNW", "PyGWater.studies.GNSS_GRACE",

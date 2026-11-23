@@ -33,7 +33,7 @@ pip install -r installation/requirements.txt
 | Dependency | Needed for |
 |---|---|
 | numpy, scipy, h5py, netCDF4 | everything |
-| geopandas, shapely | regional masks from shapefiles (`mesh/shape_mask.py`) |
+| geopandas, shapely | regional masks from shapefiles (`src/mesh/shape_mask.py`) |
 | pytest | the tests in `tests/` |
 | pygmt | figures in `examples/` only (optional; can live in a separate environment) |
 
@@ -105,10 +105,8 @@ These files are third-party data and are not covered by the PyGWater license; pl
 
 ## 3. Installing and running PyGWater
 
-The repository folder `PyGWater/` is itself the Python package `PyGWater`: `__init__.py` sits at the top, the library
-subpackages (`basis/`, `earth/`, `forward/`, `inversion/`, `observations/`, `preprocessing/`, `mesh/`, `utils/`,
-`config.py`) sit next to `studies/`, `examples/`, `tests/`, `doc/` and `installation/`. Installing it in editable mode
-makes it importable from anywhere, while your edits take effect immediately:
+The library is the folder `src/`; installing it in editable mode makes it importable as `PyGWater` from anywhere,
+while your edits in `src/` take effect immediately:
 
 ```bash
 cd PyGWater
@@ -124,35 +122,37 @@ python studies/Fu2015_PNW/real_data.py         # a reproducible study
 python -m pytest tests -q                      # all tests; those needing the Love numbers are skipped if input/LLN/ is missing
 ```
 
-Install metadata (`PyGWater.egg-info`) and build files (`installation/build/`) are written to `installation/`, so the
-top level holds only the package; neither is tracked by git. (The tests also run from a plain checkout without
-installation.)
+Install metadata (`PyGWater.egg-info`) and build files (`installation/build/`) are written to `installation/`, so
+the top level stays clean; neither is tracked by git. If an older install left `pygwater.egg-info` or `build/` at the
+top level, delete them.
 
-**PyCharm.** Select the `pygwater` conda interpreter. PyCharm does not follow the editable-install hook, so `PyGWater`
-imports may be underlined in red although the code runs. To fix this, add the folder that *contains* the repository
-(e.g. `~/codes`) to the interpreter paths: Settings → Project → Python Interpreter → Show All → select the interpreter
-→ Show Interpreter Paths → `+` → `~/codes`.
+(The tests also run from a plain checkout without installation.) In PyCharm, select the `pygwater` conda interpreter
+after the install. PyCharm may not follow the editable-install hook, so `PyGWater` imports can be underlined in red
+although the code runs.
 
 ### What the installed package contains
 
-Everything published on GitHub is released as one package, `PyGWater`, with the same layout as the repository:
+Studies, examples, tests, documentation and installation files are part of PyGWater, not extras: everything
+published on GitHub is released as one package. Without moving any folder, `pyproject.toml` installs
 
-| folder | imported as | content |
+| folder | installed as | content |
 |---|---|---|
-| top level, `basis/`, `earth/`, ... | `PyGWater`, `PyGWater.basis`, ... | the library |
+| `src/` | `PyGWater` | the core code |
 | `studies/` | `PyGWater.studies` | reproducible studies: `GNSS_GRACE/`, `Fu2015_PNW/`, `China/` |
 | `examples/` | `PyGWater.examples` | one script per feature |
 | `tests/` | `PyGWater.tests` | the test suite |
 | `doc/` | `PyGWater.doc` | installation and user guides |
 | `installation/` | `PyGWater.installation` | `environment.yml`, `requirements.txt`, `pygwater_paths.cfg.example` |
 
-Notes:
+so that `pip install PyGWater` (or the wheel of a release) gives users everything. Notes:
 
 - Studies and examples are **scripts**: run them with `python <file>`, not imported. Several studies import their
   sibling files (`from config import CONFIG`), which works because Python puts the script's folder first on the path.
-- In a regular (non-editable) install they sit in `site-packages/PyGWater/studies/...` and `.../examples/`; find them
-  with `python -c "import PyGWater.studies as s; print(s.__path__[0])"`. Copy a study elsewhere before editing it;
+- In a regular (non-editable) install they sit in `site-packages/PyGWater/studies/...` and `.../examples/`; find them with
+  `python -c "import PyGWater.studies as s; print(s.__path__[0])"`. Copy a study elsewhere before editing it;
   its outputs go where its config points (the external data folder), never into `site-packages`.
+- In the editable install (`pip install -e .`) only `import PyGWater` is mapped (a setuptools limitation for
+  sub-packages in other folders); run studies, examples and tests from the repository as above.
 - The installed package is larger by about 0.5 MB of scripts and text; data are never packaged.
 - Not published (git-ignored, excluded from the package): `studies/JGR2025_basis_functions/`,
   `studies/GNSS_TWS_validation/`, `doc/cowork_sync.md`, `Claude outputs/`, `installation/pygwater_paths.cfg`.

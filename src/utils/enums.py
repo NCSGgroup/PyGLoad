@@ -34,7 +34,7 @@ class Displacement(Enum):
     Gravity   : surface gravity change seen by a gravimeter on the deforming Earth (Farrell, 1972)
     North/East: geographic horizontal components at the evaluation points (used by all forward models)
     GravityDisturbance: gravity disturbance at a height above the reference sphere (satellite / airborne)
-    See earth/observables.py for the definitions (this enum is also available as Observables.Observable).
+    See src/earth/observables.py for the definitions (this enum is also available as Observables.Observable).
     """
     Vertical = 0
     Horizontal = 1

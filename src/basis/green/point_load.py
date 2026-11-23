@@ -73,7 +73,7 @@ class LGF_truncation:
         """
         Surface gravity change per kg of load [m/s^2/kg], positive = increase (Farrell, 1972):
             g/M * sum_n   (g/M = G/a^2, consistent with M; the Newtonian part is then exactly G/chord^2) [newton_n + (n+1) k_n - 2 h_n] P_n
-        newton_n = -n ('below'), n+1 ('above') or 0 ('none'), see earth/observables.py. Truncated series: as
+        newton_n = -n ('below'), n+1 ('above') or 0 ('none'), see src/earth/observables.py. Truncated series: as
         for the other finite LGFs, it is equivalent to the spherical-harmonic solution only if lmax matches the
         resolution of the load (Sect. 4 of Yang et al., 2025).
         """

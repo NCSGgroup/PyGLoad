@@ -6,13 +6,13 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 
-# The repository folder is the package PyGWater. Normally it is installed (`pip install -e .`); if not, register the
-# folder under that name so that the tests also run from a plain checkout (e.g. on GitHub CI).
+# PyGWater's code is the folder src/, imported as `PyGWater`. Normally it is installed (`pip install -e .`); if not,
+# register src/ under that name so that the tests also run from a plain checkout (e.g. on GitHub CI).
 try:
     import PyGWater  # noqa: F401
 except ImportError:
-    spec = importlib.util.spec_from_file_location('PyGWater', ROOT / '__init__.py',
-                                                  submodule_search_locations=[str(ROOT)])
+    spec = importlib.util.spec_from_file_location('PyGWater', ROOT / 'src' / '__init__.py',
+                                                  submodule_search_locations=[str(ROOT / 'src')])
     module = importlib.util.module_from_spec(spec)
     sys.modules['PyGWater'] = module
     spec.loader.exec_module(module)

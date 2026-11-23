@@ -6,7 +6,7 @@ One class, three methods of the paper selected with `kernel`:
     D-LGF      : GreenFunctionBasis.from_grid(lat, lon, res, mask, kernel='disk')
     CD-LGF     : GreenFunctionBasis.from_grid(lat, lon, res, mask, kernel='cluster_disk', subgrid=0.1)
 
-Green's functions as a Basis (basis/base.py): the load is a set of cells (mascons), each carrying a uniform EWH
+Green's functions as a Basis (src/basis/base.py): the load is a set of cells (mascons), each carrying a uniform EWH
 x_j [m], and the response is the convolution with the load Green's function (Sect. 3-6 of Yang et al., 2025):
 
     kernel='point_mass' : finite (truncated) point-mass LGF, Eq. 8;  cell mass = rho_w * area_j * x_j

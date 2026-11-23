@@ -99,7 +99,7 @@ class cluster_disk_fast:
     Approximate version of cluster_disk: beyond 8 deg (measured from sub-disk no. 100) the response of EVERY sub-disk
     is replaced by that of sub-disk no. 100, so the cell must contain more than 100 sub-cells. Kept for
     reproducibility; for new work use cluster_disk or GreenFunctionBasis(kernel='cluster_disk'), which is exact
-    and faster (tabulated kernels, basis/green/disk_load.DiskLoadTable).
+    and faster (tabulated kernels, src/basis/green/disk_load.DiskLoadTable).
     """
 
     def __init__(self, lln: LoveNumber, verbose=False):

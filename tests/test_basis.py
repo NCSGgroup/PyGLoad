@@ -1,5 +1,5 @@
 """
-Tests of the common Basis interface (basis/base.py) and the basis-independent ForwardModel.
+Tests of the common Basis interface (src/basis/base.py) and the basis-independent ForwardModel.
 """
 import numpy as np
 import pytest
@@ -126,7 +126,7 @@ def test_los_and_load_synthesis(lln, load):
 
 @pytest.mark.filterwarnings("ignore::UserWarning")
 def test_cluster_disk_basis_equals_templates(tmp_path):
-    """CD-LGF basis (tabulated kernels, any points) == direct sum of sub-disks in forward/disk_cluster.py"""
+    """CD-LGF basis (tabulated kernels, any points) == direct sum of sub-disks in src/forward/disk_cluster.py"""
     from PyGWater.forward.disk_cluster import cluster_disk
     from PyGWater.basis.green.disk_load import DiskLoad, DiskLoadTable
     lln = LoveNumber().config(lmax=3000, method=LLN_Data.PREM).get_Love_number()

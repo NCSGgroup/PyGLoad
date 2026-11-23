@@ -5,8 +5,13 @@ needed for the environment lives in `installation/`:
 
 | file | purpose |
 |---|---|
+| `setup_env.sh` | creates and verifies the environment, registers the data root, writes the lock file |
 | `environment.yml` | conda/mamba environment `pygwater` |
+| `environment.lock.yml` | exact versions of a tested install (written by `setup_env.sh install`) |
 | `requirements.txt` | the same dependencies for `pip` |
+| `pygwater_paths.cfg.example` | template of the local data-root setting |
+
+As in PyGLDA v2, only the environment is installed, not the code: the code is used directly from the repository.
 
 ---
 
@@ -15,16 +20,27 @@ needed for the environment lives in `installation/`:
 PyGWater has no pinned binary stack (unlike PyGLDA v2, which is locked by WaterGAP 2.2e); any recent scientific
 Python works. Tested with Python 3.13, numpy 2.5, scipy 1.18, h5py 3.16, netCDF4 1.7, geopandas 1.2 and shapely 2.2.
 
-With conda / mamba:
+With conda / mamba (recommended), using the setup script:
 
 ```bash
 git clone https://github.com/NCSGgroup/PyGWater.git
 cd PyGWater
+bash installation/setup_env.sh check                                            # shows what would happen; installs nothing
+bash installation/setup_env.sh install --data-root /path/to/PyGWater_external_data
+conda activate pygwater
+```
+
+`install` creates the environment `pygwater` from `environment.yml` (an existing one is kept and only verified),
+writes `installation/pygwater_paths.cfg` with the data root (section 2), checks that every package and the PyGWater
+code import, runs the tests and writes `installation/environment.lock.yml`. Options: `--name NAME` for another
+environment name, `--no-pygmt` without the plotting library. Without the script:
+
+```bash
 mamba env create -f installation/environment.yml
 conda activate pygwater
 ```
 
-With pip:
+With pip, into an existing Python:
 
 ```bash
 pip install -r installation/requirements.txt
@@ -103,18 +119,18 @@ These files are third-party data and are not covered by the PyGWater license; pl
 
 ---
 
-## 3. Installing and running PyGWater
+## 3. Running PyGWater
 
-The library is the folder `src/`; installing it in editable mode makes it importable as `PyGWater` from anywhere,
-while your edits in `src/` take effect immediately:
+The code is not installed. As in PyGLDA v2, it is used directly from the repository: the core code is the folder
+`src/`, and every study, example and test puts the repository folder on the Python path in its first lines,
 
-```bash
-cd PyGWater
-pip install -e .                    # once, in the pygwater environment
-python -c "import PyGWater; print(PyGWater.__version__)"
+```python
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))   # repository root (parents[1] for examples/)
+from src.basis.green.gf_basis import GreenFunctionBasis
+import src as pgw                                               # main classes: pgw.LoveNumber, pgw.SlepianBasis, ...
 ```
 
-Scripts and tests are then run from any folder:
+so scripts and tests run from any folder, in the `pygwater` environment:
 
 ```bash
 python examples/slepian_truncation.py          # one feature per example
@@ -122,39 +138,15 @@ python studies/Fu2015_PNW/real_data.py         # a reproducible study
 python -m pytest tests -q                      # all tests; those needing the Love numbers are skipped if input/LLN/ is missing
 ```
 
-Install metadata (`PyGWater.egg-info`) and build files (`installation/build/`) are written to `installation/`, so
-the top level stays clean; neither is tracked by git. If an older install left `pygwater.egg-info` or `build/` at the
-top level, delete them.
+Your own scripts outside the repository add the same line with the path of the repository folder. In PyCharm, open
+the repository folder as the project and select the `pygwater` conda interpreter; `from src...` imports resolve
+without any further setting.
 
-(The tests also run from a plain checkout without installation.) In PyCharm, select the `pygwater` conda interpreter
-after the install. PyCharm may not follow the editable-install hook, so `PyGWater` imports can be underlined in red
-although the code runs.
+### What is published
 
-### What the installed package contains
-
-Studies, examples, tests, documentation and installation files are part of PyGWater, not extras: everything
-published on GitHub is released as one package. Without moving any folder, `pyproject.toml` installs
-
-| folder | installed as | content |
-|---|---|---|
-| `src/` | `PyGWater` | the core code |
-| `studies/` | `PyGWater.studies` | reproducible studies: `GNSS_GRACE/`, `Fu2015_PNW/`, `China/` |
-| `examples/` | `PyGWater.examples` | one script per feature |
-| `tests/` | `PyGWater.tests` | the test suite |
-| `doc/` | `PyGWater.doc` | installation and user guides |
-| `installation/` | `PyGWater.installation` | `environment.yml`, `requirements.txt`, `pygwater_paths.cfg.example` |
-
-so that `pip install PyGWater` (or the wheel of a release) gives users everything. Notes:
-
-- Studies and examples are **scripts**: run them with `python <file>`, not imported. Several studies import their
-  sibling files (`from config import CONFIG`), which works because Python puts the script's folder first on the path.
-- In a regular (non-editable) install they sit in `site-packages/PyGWater/studies/...` and `.../examples/`; find them with
-  `python -c "import PyGWater.studies as s; print(s.__path__[0])"`. Copy a study elsewhere before editing it;
-  its outputs go where its config points (the external data folder), never into `site-packages`.
-- In the editable install (`pip install -e .`) only `import PyGWater` is mapped (a setuptools limitation for
-  sub-packages in other folders); run studies, examples and tests from the repository as above.
-- The installed package is larger by about 0.5 MB of scripts and text; data are never packaged.
-- Not published (git-ignored, excluded from the package): `studies/JGR2025_basis_functions/`,
-  `studies/GNSS_TWS_validation/`, `doc/cowork_sync.md`, `Claude outputs/`, `installation/pygwater_paths.cfg`.
+Everything in the repository except personal and local files: `src/`, the studies `GNSS_GRACE/`, `Fu2015_PNW/` and
+`China/`, `examples/`, `tests/`, `doc/` and `installation/`. Not published (git-ignored):
+`studies/JGR2025_basis_functions/`, `studies/GNSS_TWS_validation/`, `doc/cowork_sync.md`, `Claude outputs/` and
+`installation/pygwater_paths.cfg`.
 
 See [user_guide.md](user_guide.md) for all options and usage.

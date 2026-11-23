@@ -17,10 +17,15 @@ functions share one interface, so every computation can be repeated with another
 
 ## Getting started
 
-1. Create the Python environment from the files in [installation/](installation) and install PyGWater.
-2. Choose a data folder outside the code and register it in the paths file in [installation/](installation).
-3. Put the load Love numbers in the input folder of that data folder.
-4. Run the tests to check the setup.
+```bash
+git clone https://github.com/NCSGgroup/PyGWater.git && cd PyGWater
+bash installation/setup_env.sh install --data-root /path/to/PyGWater_external_data
+conda activate pygwater
+```
+
+The script creates the Python environment, registers a data folder outside the code and checks the setup; the code
+itself needs no installation (scripts import `src` from the repository). Put the load Love numbers in the input
+folder of the data folder.
 
 Step-by-step instructions are in the [installation guide](doc/installation.md).
 
